@@ -13,67 +13,94 @@
   <meta property="og:image" content="assets/self.jpg" />
   <link rel="icon" href="assets/logo.png" />
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- LaTeX-like serif for titles -->
+  <!-- Body: Inter；Title: EB Garamond（不变） -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=EB+Garamond:wght@500;700&display=swap" rel="stylesheet">
   <style>
     html { scroll-behavior: smooth; }
-    body { background: #ffffff; color: #161616; }
+    body { background:#fff; color:#161616; font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji"; }
     .glass { background: rgba(255,255,255,0.7); backdrop-filter: blur(8px); }
     .section { border-top: 1px solid #e9e9e9; }
-    .latex-title { font-family: "EB Garamond", ui-serif, Georgia, "Times New Roman", serif; letter-spacing: .02em; }
+    .latex-title { font-family: "EB Garamond", ui-serif, Georgia, "Times New Roman", serif; letter-spacing:.02em; }
     .latex-smcaps { font-variant: small-caps; }
-    .icon { width: 18px; height: 18px; display: inline-block; vertical-align: -3px; margin-right: 6px; }
-
-    /* Gradient brand text */
+    .icon { width:18px; height:18px; display:inline-block; vertical-align:-3px; margin-right:6px; }
+    /* Brand gradient text */
     .brand-gradient {
       background: linear-gradient(90deg, #0ea5e9, #6366f1, #ec4899);
       -webkit-background-clip: text; background-clip: text; color: transparent;
     }
-
-    /* Hero gradient + particles */
+    /* Hero gradient + particles（保持） */
     .moving-gradient::before{
       content:""; position:absolute; inset:0; z-index:0; opacity:.6;
       background: radial-gradient(60% 50% at 50% 10%, rgba(99,102,241,.20), transparent 60%),
                   radial-gradient(40% 30% at 80% 0%, rgba(14,165,233,.18), transparent 60%),
                   radial-gradient(30% 25% at 20% 0%, rgba(236,72,153,.16), transparent 60%);
-      animation: floatGrad 18s ease-in-out infinite alternate;
-      pointer-events:none;
+      animation: floatGrad 18s ease-in-out infinite alternate; pointer-events:none;
     }
-    @keyframes floatGrad { 0%{transform: translateY(-3%) scale(1);} 100%{transform: translateY(3%) scale(1.05);} }
-    #particles { position:absolute; inset:0; z-index:1; pointer-events:none; opacity:.6; }
+    @keyframes floatGrad { 0%{transform:translateY(-3%) scale(1)} 100%{transform:translateY(3%) scale(1.05)} }
+    #particles{ position:absolute; inset:0; z-index:1; pointer-events:none; opacity:.6; }
     .hero-inner{ position:relative; z-index:2; }
 
-    /* Paper-feel image card */
-    .paper {
-      background:#f8f9fb; /* very light gray */
-      border:1px solid #e5e7eb;
-      border-radius: 0.75rem;
-      transition: box-shadow .25s ease, transform .25s ease;
-    }
-    .paper:hover { box-shadow: 0 14px 30px rgba(2,6,23,.08); transform: translateY(-2px); }
+    /* --- 高阶排版组件 --- */
+    .kicker{ letter-spacing:.18em; text-transform:uppercase; font-size:.72rem; color:#6b7280; }
+    .section-hd{ display:flex; align-items:center; gap:.9rem; }
+    .section-hd .rule{ height:1px; flex:1; background:linear-gradient(90deg,#e5e7eb,transparent); }
+    .h2{ font-size:1.5rem; font-weight:700; letter-spacing:.2px; }
+    .muted{ color:#6b7280; }
+    .lead{ color:#4b5563; line-height:1.7; }
 
-    /* Lightbox */
-    .lightbox { position:fixed; inset:0; background:rgba(0,0,0,.64); display:none; align-items:center; justify-content:center; z-index:80; }
-    .lightbox img { max-width: min(96vw,1400px); max-height: 92vh; border-radius: 1rem; box-shadow: 0 30px 80px rgba(0,0,0,.35); }
+    /* Spec card（研究方向卡片） */
+    .spec{ background:#fff; border:1px solid #e7e7ea; border-radius:16px; padding:22px 22px 20px 26px; position:relative; }
+    .spec::before{
+      content:""; position:absolute; left:-1px; top:-1px; bottom:-1px; width:4px;
+      background:linear-gradient(180deg,#93c5fd,#a5b4fc 60%,#f0abfc);
+      border-top-left-radius:16px; border-bottom-left-radius:16px;
+    }
+    .spec h3{ font-weight:600; margin-bottom:.35rem; }
+    .spec p{ font-size:.925rem; color:#52525b; }
+
+    /* Paper-feel image card（保持纸感但更克制） */
+    .paper{ background:#f8f9fb; border:1px solid #e5e7eb; border-radius:12px; transition:box-shadow .25s ease, transform .25s ease; }
+    .paper:hover{ box-shadow:0 16px 40px rgba(2,6,23,.08); transform:translateY(-2px); }
+
+    /* Timeline（经验 / 教育） */
+    .timeline{ position:relative; padding-left:22px; }
+    .timeline::before{ content:""; position:absolute; left:8px; top:6px; bottom:6px; width:2px; background:linear-gradient(#e5e7eb,#e5e7eb); }
+    .t-item{ position:relative; padding:18px 18px 18px 18px; margin-left:0; border:1px solid #ececec; border-radius:14px; background:#fff; }
+    .t-item + .t-item{ margin-top:14px; }
+    .t-dot{ position:absolute; left:-22px; top:22px; width:10px; height:10px; border-radius:999px; background:#6366f1; box-shadow:0 0 0 4px #eef2ff; }
+    .t-hd{ display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; }
+    .t-role{ font-weight:600; }
+    .t-where{ color:#6b7280; font-size:.92rem; }
+    .t-when{ color:#6b7280; font-size:.9rem; white-space:nowrap; }
+    .t-body{ margin-top:.5rem; color:#4b5563; font-size:.95rem; line-height:1.7; }
+    .pill{ display:inline-block; padding:.25rem .55rem; border:1px solid #e6e6ef; border-radius:999px; font-size:.78rem; color:#555; background:#fbfbfe; margin-right:.35rem; }
+
+    /* Contact card */
+    .contact-card{ background:#fafafb; border:1px solid #ececf2; border-radius:16px; padding:22px; }
+    .soft-btn{ display:inline-flex; align-items:center; gap:.45rem; padding:.5rem .8rem; border-radius:999px; border:1px solid #e6e6ef; background:#fff; color:#374151; font-size:.9rem; transition:transform .15s ease, box-shadow .2s ease; }
+    .soft-btn:hover{ transform:translateY(-1px); box-shadow:0 8px 18px rgba(2,6,23,.06); }
+
+    /* Lightbox（保持） */
+    .lightbox{ position:fixed; inset:0; background:rgba(0,0,0,.64); display:none; align-items:center; justify-content:center; z-index:80; }
+    .lightbox img{ max-width:min(96vw,1400px); max-height:92vh; border-radius:1rem; box-shadow:0 30px 80px rgba(0,0,0,.35); }
     .lightbox[data-open="true"]{ display:flex; }
-    .lightbox .close { position:absolute; top:18px; right:22px; color:#fff; font-size:22px; opacity:.9; }
+    .lightbox .close{ position:absolute; top:18px; right:22px; color:#fff; font-size:22px; opacity:.9; }
   </style>
 </head>
+
 <body class="antialiased">
-  <!-- Top nav -->
+  <!-- Top nav（仅把品牌文字做渐变 & 图标加大，其余不变） -->
   <header class="sticky top-0 z-50 border-b border-zinc-200 glass">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
       <a href="#home" class="flex items-center gap-3">
-        <!-- logo bigger -->
         <img src="assets/logo.png" alt="ACHCI Lab logo" class="w-14 h-14 rounded-lg object-contain" onerror="this.src='https://github.com/Lixeeone.png'"/>
-        <!-- brand text gradient -->
         <span class="font-semibold brand-gradient text-lg">ACHCI Lab</span>
       </a>
-      <nav class="hidden md:flex items-center gap-6 text-sm text-zinc-700">
+      <nav class="hidden md:flex items-center gap-8 text-sm text-zinc-700">
         <a href="#research" class="hover:opacity-80">Research</a>
-        <a href="#highlights" class="hover:opacity-80">Highlights</a>
+        <a href="#highlights" class="hover:opacity-80">Future</a>
         <a href="#publications" class="hover:opacity-80">Publications</a>
         <a href="#experience" class="hover:opacity-80">Experience</a>
         <a href="#education" class="hover:opacity-80">Education</a>
@@ -82,34 +109,32 @@
     </div>
   </header>
 
-  <!-- Hero -->
+  <!-- Hero（不改） -->
   <section id="home" class="relative overflow-hidden moving-gradient">
     <canvas id="particles" aria-hidden="true"></canvas>
     <div class="hero-inner relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
       <div class="grid md:grid-cols-5 gap-10 items-center">
         <div class="md:col-span-3">
-          <p class="text-sm uppercase tracking-widest text-zinc-600">Founder, ACHCI Lab</p>
+          <p class="kicker">Founder, ACHCI Lab</p>
           <h1 class="mt-2 text-4xl sm:text-5xl font-extrabold leading-tight">Lee Tzu Lam</h1>
-          <p class="mt-4 text-lg leading-relaxed text-zinc-700">
+          <p class="mt-4 text-lg lead">
             My research spans <span class="font-medium">Affective Computing</span>, <span class="font-medium">Brain-Inspired Cognitive Decision-Making</span>, and <span class="font-medium">Human-Computer Interaction</span>. I build reproducible AI systems and multimodal models that understand and respond to human emotion.
           </p>
           <div class="mt-6 flex flex-wrap gap-3">
-            <a class="inline-flex items-center gap-2 rounded-2xl border border-zinc-300 px-4 py-2 text-sm hover:bg-zinc-50" href="https://github.com/Lixeeone" target="_blank" rel="noopener">
-              <svg class="icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 .2a7.8 7.8 0 0 0-2.5 15.2c.4.1.6-.2.6-.4v-1.5c-2.4.5-2.9-1.1-2.9-1.1-.4-1-.9-1.3-.9-1.3-.8-.6.1-.6.1-.6 1 .1 1.6 1 1.6 1 .8 1.5 2.2 1.1 2.7.8.1-.6.3-1.1.6-1.3-1.9-.2-3.9-1-3.9-4.3 0-.9.3-1.6.8-2.2 0-.2-.3-1 .1-2.1 0 0 .7-.2 2.2.8.6-.2 1.2-.2 1.8-.2s1.2 0 1.8.2c1.5-1 2.2-.8 2.2-.8.4 1.1.1 1.9.1 2.1.5.6.8 1.3.8 2.2 0 3.3-2 4-3.9 4.3.3.2.6.7.6 1.5v2.2c0 .2.2.5.6.4A7.8 7.8 0 0 0 8 .2z"/></svg>
+            <a class="soft-btn" href="https://github.com/Lixeeone" target="_blank" rel="noopener">
+              <svg class="icon" viewBox="0 0 16 16" fill="currentColor"><path d="M8 .2a7.8 7.8 0 0 0-2.5 15.2c.4.1.6-.2.6-.4v-1.5c-2.4.5-2.9-1.1-2.9-1.1-.4-1-.9-1.3-.9-1.3-.8-.6.1-.6.1-.6 1 .1 1.6 1 1.6 1 .8 1.5 2.2 1.1 2.7.8.1-.6.3-1.1.6-1.3-1.9-.2-3.9-1-3.9-4.3 0-.9.3-1.6.8-2.2 0-.2-.3-1 .1-2.1 0 0 .7-.2 2.2.8.6-.2 1.2-.2 1.8-.2s1.2 0 1.8.2c1.5-1 2.2-.8 2.2-.8.4 1.1.1 1.9.1 2.1.5.6.8 1.3.8 2.2 0 3.3-2 4-3.9 4.3.3.2.6.7.6 1.5v2.2c0 .2.2.5.6.4A7.8 7.8 0 0 0 8 .2z"/></svg>
               GitHub
             </a>
-            <a class="inline-flex items-center gap-2 rounded-2xl border border-zinc-300 px-4 py-2 text-sm hover:bg-zinc-50" href="https://huggingface.co/Lixeeone" target="_blank" rel="noopener">
-              <img class="icon" src="https://huggingface.co/front/assets/huggingface_logo-noborder.svg" alt="Hugging Face"/>
-              Hugging Face
+            <a class="soft-btn" href="https://huggingface.co/Lixeeone" target="_blank" rel="noopener">
+              <img class="icon" src="https://huggingface.co/front/assets/huggingface_logo-noborder.svg" alt="Hugging Face"/> Hugging Face
             </a>
-            <a class="inline-flex items-center gap-2 rounded-2xl border border-zinc-300 px-4 py-2 text-sm hover:bg-zinc-50" href="https://orcid.org/0009-0002-4314-455X" target="_blank" rel="noopener">
-              <svg class="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 1.5a10.5 10.5 0 1 0 0 21 10.5 10.5 0 0 0 0-21Zm-2.7 5.2h1.3v10.6H9.3V6.7Zm3.7 0c2.5 0 4.3 1.8 4.3 4.4s-1.8 4.4-4.3 4.4h-2V6.7h2Zm0 1.3h-.7v6.2h.7c1.9 0 3.1-1.3 3.1-3.1 0-1.8-1.2-3.1-3.1-3.1Z"/></svg>
+            <a class="soft-btn" href="https://orcid.org/0009-0002-4314-455X" target="_blank" rel="noopener">
+              <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1.5a10.5 10.5 0 1 0 0 21 10.5 10.5 0 0 0 0-21Zm-2.7 5.2h1.3v10.6H9.3V6.7Zm3.7 0c2.5 0 4.3 1.8 4.3 4.4s-1.8 4.4-4.3 4.4h-2V6.7h2Zm0 1.3h-.7v6.2h.7c1.9 0 3.1-1.3 3.1-3.1 0-1.8-1.2-3.1-3.1-3.1Z"/></svg>
               ORCID
             </a>
           </div>
         </div>
         <div class="md:col-span-2 flex justify-center md:justify-end">
-          <!-- Portrait: show original ratio (no crop) -->
           <div class="p-4 rounded-3xl border border-zinc-200 bg-white/70 backdrop-blur">
             <img src="assets/self.jpg" alt="Portrait of Lee Tzu Lam" class="max-w-xs w-auto h-auto rounded-2xl object-contain"/>
           </div>
@@ -118,90 +143,96 @@
     </div>
   </section>
 
-  <!-- Research areas -->
+  <!-- Research Areas（高阶Spec Cards） -->
   <section id="research" class="section">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-      <h2 class="text-2xl font-bold">Research Areas</h2>
-      <p class="mt-2 text-zinc-600">Core themes driving my current projects.</p>
-      <div class="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <article class="rounded-2xl border border-zinc-200 p-5 bg-white">
-          <h3 class="font-semibold">Affective Computing</h3>
-          <p class="mt-2 text-sm text-zinc-600">Multimodal emotion recognition and controllable, VAD-consistent generation; reliability testing under polarity flips.</p>
+      <div class="section-hd mb-3">
+        <span class="kicker">Section 01</span><div class="rule"></div>
+      </div>
+      <h2 class="h2">Research Areas</h2>
+      <p class="mt-2 muted">Core themes driving my current projects.</p>
+
+      <div class="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <article class="spec">
+          <h3>Affective Computing</h3>
+          <p>Multimodal emotion recognition and controllable, VAD-consistent generation; reliability testing under polarity flips.</p>
         </article>
-        <article class="rounded-2xl border border-zinc-200 p-5 bg-white">
-          <h3 class="font-semibold">Brain-Inspired Cognitive Decision-Making</h3>
-          <p class="mt-2 text-sm text-zinc-600">Neuro-symbolic priors, appraisal mechanisms, and self-elicited knowledge distillation to shape reasoning in LMs.</p>
+
+        <article class="spec">
+          <h3>Brain-Inspired Cognitive Decision-Making</h3>
+          <p>Neuro-symbolic priors, appraisal mechanisms, and self-elicited knowledge distillation to shape reasoning in LMs.</p>
         </article>
-        <article class="rounded-2xl border border-zinc-200 p-5 bg-white">
-          <h3 class="font-semibold">Human-Computer Interaction</h3>
-          <p class="mt-2 text-sm text-zinc-600">Emotion-centric dialogue systems, trustworthy interaction, and assistive tools for research reproducibility.</p>
+
+        <article class="spec">
+          <h3>Human-Computer Interaction</h3>
+          <p>Emotion-centric dialogue systems, trustworthy interaction, and assistive tools for research reproducibility.</p>
         </article>
       </div>
     </div>
   </section>
 
-  <!-- Future Research Directions -->
+  <!-- Future Research Directions（双栏高级要点） -->
   <section id="highlights" class="section">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-      <h2 class="text-2xl font-bold">Future Research Directions</h2>
-      <div class="mt-6 grid md:grid-cols-2 gap-6 text-sm">
-        <div class="rounded-2xl border border-zinc-200 p-5 bg-white">
-          <ul class="space-y-2 text-zinc-700">
-            <li>🧠 <strong>Brain-Inspired Sparse Activation</strong> — top-k routing & Hebbian-like gating for energy-efficient perception.</li>
-            <li>⚡️ <strong>Efficient Decision-Making</strong> — amortized tree search & model-based RL with cognitive constraints.</li>
-            <li>🧩 <strong>Ling-Series</strong> — <em>Ling-MCP</em> (memory-constrained planning) & <em>Ling-CoT</em> (evolutionary chain-of-thought) for robust reasoning.</li>
-            <li>🤝 <strong>HCI · evo-MCP / evo-CoT</strong> — interactive tutoring & co-creation with emotion-aware feedback loops.</li>
-            <li>🤖 <strong>Agents</strong> — tool use + self-reflection + affect cues for trustworthy collaboration.</li>
-          </ul>
-        </div>
-        <div class="rounded-2xl border border-zinc-200 p-5 bg-white">
-          <ul class="space-y-2 text-zinc-700">
-            <li>🔍 <strong>Probing Intermediate Layers</strong> — causal mediation & representation surgery to inspect decision paths.</li>
-            <li>🧠🎧 <strong>ChineseEEG-2</strong> — speech↔listening semantic alignment & neural decoding dataset for multimodal research.</li>
-            <li>🧰 <strong>NCC Lab Originals</strong> — reproducible EEG/MEG pipelines with <em>MNE-Python</em> to accelerate analysis.</li>
-            <li>🏷️📄 <strong>Seed-V (SJTU) · DeepSeek-OCR</strong> — VL preprocessing & document understanding for emotion tasks.</li>
-            <li>🫀⚖️ <strong>Amygdala-like Module</strong> — prioritized encoding & rumination bias; evaluate single-turn discrete gating as a safe decision prior.</li>
-          </ul>
-        </div>
+      <div class="section-hd mb-3">
+        <span class="kicker">Section 02</span><div class="rule"></div>
       </div>
+      <h2 class="h2">Future Research Directions</h2>
+
+      <div class="mt-8 grid md:grid-cols-2 gap-6 text-[.95rem] leading-7 text-zinc-700">
+        <ul class="space-y-2.5">
+          <li>🧠 <b>Brain-Inspired Sparse Activation</b> — top-k routing & Hebbian-like gating for energy-efficient perception.</li>
+          <li>⚡️ <b>Efficient Decision-Making</b> — amortized tree search & model-based RL with cognitive constraints.</li>
+          <li>🧩 <b>Ling-Series</b> — <i>Ling-MCP</i> (memory-constrained planning) & <i>Ling-CoT</i> (evolutionary chain-of-thought) for robust reasoning.</li>
+          <li>🤝 <b>HCI · evo-MCP / evo-CoT</b> — interactive tutoring & co-creation with emotion-aware feedback loops.</li>
+          <li>🤖 <b>Agents</b> — tool use + self-reflection + affect cues for trustworthy collaboration.</li>
+        </ul>
+        <ul class="space-y-2.5">
+          <li>🔍 <b>Probing Intermediate Layers</b> — causal mediation & representation surgery to inspect decision paths.</li>
+          <li>🧠🎧 <b>ChineseEEG-2</b> — speech↔listening semantic alignment & neural decoding dataset for multimodal research.</li>
+          <li>🧰 <b>NCC Lab Originals</b> — reproducible EEG/MEG pipelines with <i>MNE-Python</i> to accelerate analysis.</li>
+          <li>🏷️📄 <b>Seed-V (SJTU) · DeepSeek-OCR</b> — VL preprocessing & document understanding for emotion tasks.</li>
+          <li>🫀⚖️ <b>Amygdala-like Module</b> — prioritized encoding & rumination bias; evaluate single-turn discrete gating as a safe decision prior.</li>
+        </ul>
+      </div>
+
       <div class="mt-6 rounded-2xl border border-zinc-200 p-5 bg-white text-sm text-zinc-700">
-        <strong>Research note ·</strong> Limiting an amygdala-like mechanism to a <em>single-turn, discrete</em> decision gate can reduce persistent affect loops and mitigate runaway self-referential states. It does <em>not</em> by itself induce or prevent "AI self-awareness"; such emergence requires long-term memory, self-modeling, and a global workspace. Here the gate is best viewed as a bias-control prior for safer decisions.
+        <b>Research note ·</b> Limiting an amygdala-like mechanism to a <i>single-turn, discrete</i> decision gate can reduce persistent affect loops and mitigate runaway self-referential states. It does <i>not</i> by itself induce or prevent “AI self-awareness”; such emergence requires long-term memory, self-modeling, and a global workspace. Here the gate is best viewed as a bias-control prior for safer decisions.
       </div>
     </div>
   </section>
 
-  <!-- Publications: left text + right embedded PNG views (assets/*.png), LaTeX-like titles) -->
+  <!-- Publications（保持：左文右图，灯箱、纸感卡片、LaTeX title） -->
   <section id="publications" class="section">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-      <h2 class="text-2xl font-bold">Selected Publications</h2>
+      <div class="section-hd mb-3">
+        <span class="kicker">Section 03</span><div class="rule"></div>
+      </div>
+      <h2 class="h2">Selected Publications</h2>
 
-      <!-- NeuroGaze-Distill -->
       <div class="mt-8 grid md:grid-cols-2 gap-6 items-start">
         <div class="rounded-2xl border border-zinc-200 p-6 bg-white">
           <h3 class="latex-title text-2xl leading-snug">
             <span class="latex-smcaps">NeuroGaze–Distill: Brain-informed Distillation and Depression–Inspired Geometric Priors for Robust Facial Emotion Recognition</span>
           </h3>
-          <p class="mt-2 text-sm text-zinc-600">Zilin Li, Weiwei Xu, Xuanqi Zhao, Yiran Zhu · 2025</p>
-          <p class="mt-3 text-sm text-zinc-700">
+          <p class="mt-2 text-sm muted">Zilin Li, Weiwei Xu, Xuanqi Zhao, Yiran Zhu · 2025</p>
+          <p class="mt-3 text-sm lead">
             Cross-modal distillation that transfers neuro-informed priors into an image-only FER student via static V/A prototypes and a depression-inspired geometric prior. Student models trained on FERPlus/AffectNet-mini require no EEG/gaze at deployment.
           </p>
-          <div class="mt-3 text-sm">
-            <a class="underline" href="https://arxiv.org/abs/2509.11916" target="_blank" rel="noopener">arXiv:2509.11916</a>
-          </div>
+          <div class="mt-3 text-sm"><a class="underline" href="https://arxiv.org/abs/2509.11916" target="_blank" rel="noopener">arXiv:2509.11916</a></div>
         </div>
         <div class="paper p-3">
           <img src="assets/N.png" alt="NeuroGaze-Distill graphic" class="w-full h-[360px] rounded-xl border border-zinc-200 object-contain cursor-zoom-in" data-lightbox="assets/N.png"/>
         </div>
       </div>
 
-      <!-- Flattened No More -->
       <div class="mt-8 grid md:grid-cols-2 gap-6 items-start">
         <div class="rounded-2xl border border-zinc-200 p-6 bg-white">
           <h3 class="latex-title text-2xl leading-snug">
             <span class="latex-smcaps">Flattened No More: Teaching VLMs to Think Stepwise via Self-Elicited Knowledge Distillation</span>
           </h3>
-          <p class="mt-2 text-sm text-zinc-600">Revised · Targeting <b>CVPR 2026</b></p>
-          <p class="mt-3 text-sm text-zinc-700">
+          <p class="mt-2 text-sm muted">Revised · Targeting <b>CVPR 2026</b></p>
+          <p class="mt-3 text-sm lead">
             We elicit and distill self-generated intermediate rationales from VLMs to encourage stepwise reasoning. The method improves chain-of-thought faithfulness while keeping decoding simple and reproducible.
           </p>
         </div>
@@ -210,14 +241,13 @@
         </div>
       </div>
 
-      <!-- EmoLoom-2B -->
       <div class="mt-8 grid md:grid-cols-2 gap-6 items-start">
         <div class="rounded-2xl border border-zinc-200 p-6 bg-white">
           <h3 class="latex-title text-2xl leading-snug">
             <span class="latex-smcaps">EmoLoom–2B: Emotion-centric QA/VAD Large Language Model</span>
           </h3>
-          <p class="mt-2 text-sm text-zinc-600">arXiv planned in <b>2026</b> · <a class="underline" href="https://huggingface.co/Lixeeone/Emoloom-2B" target="_blank" rel="noopener">HF model page</a></p>
-          <p class="mt-3 text-sm text-zinc-700">
+          <p class="mt-2 text-sm muted">arXiv planned in <b>2026</b> · <a class="underline" href="https://huggingface.co/Lixeeone/Emoloom-2B" target="_blank" rel="noopener">HF model page</a></p>
+          <p class="mt-3 text-sm lead">
             A ~2B-parameter LLM tailored for emotion-centric QA with VAD-preserving objectives and an appraisal verifier. Stress-tests show steadier valence under polarity flips and fewer format failures.
           </p>
         </div>
@@ -225,131 +255,154 @@
           <img src="assets/E.png" alt="EmoLoom-2B graphic" class="w-full h-[360px] rounded-xl border border-zinc-200 object-contain cursor-zoom-in" data-lightbox="assets/E.png"/>
         </div>
       </div>
-
     </div>
   </section>
 
-  <!-- Experience -->
+  <!-- Research & Leadership Experience（高阶时间轴） -->
   <section id="experience" class="section">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-      <h2 class="text-2xl font-bold">Research & Leadership Experience</h2>
-      <div class="mt-6 grid md:grid-cols-2 gap-6">
-        <div class="rounded-2xl border border-zinc-200 p-5 bg-white">
-          <h3 class="font-semibold">Founder, ACHCI Lab</h3>
-          <p class="mt-2 text-sm text-zinc-600">Leading research on affect-aware intelligence; building open, reproducible pipelines and model releases.</p>
+      <div class="section-hd mb-3">
+        <span class="kicker">Section 04</span><div class="rule"></div>
+      </div>
+      <h2 class="h2">Research & Leadership Experience</h2>
+
+      <div class="mt-8 timeline">
+        <div class="t-item">
+          <div class="t-dot"></div>
+          <div class="t-hd">
+            <div>
+              <div class="t-role">Founder, ACHCI Lab</div>
+              <div class="t-where">Independent Research Group</div>
+            </div>
+            <div class="t-when">2025 – Present</div>
+          </div>
+          <div class="t-body">
+            Leading research on affect-aware intelligence; building open & reproducible pipelines and model releases.
+            <div class="mt-2">
+              <span class="pill">reproducibility</span>
+              <span class="pill">affective-AI</span>
+              <span class="pill">multimodal</span>
+            </div>
+          </div>
         </div>
-        <div class="rounded-2xl border border-zinc-200 p-5 bg-white">
-          <h3 class="font-semibold">Research Engineer & Collaborator</h3>
-          <p class="mt-2 text-sm text-zinc-600">Full-stack ML engineering across data, training, evaluation, and publication-grade tooling (AMP, channels-last, gradient checkpointing).</p>
+
+        <div class="t-item">
+          <div class="t-dot"></div>
+          <div class="t-hd">
+            <div>
+              <div class="t-role">Research Engineer & Collaborator</div>
+              <div class="t-where">Open-source & academic collaborations</div>
+            </div>
+            <div class="t-when">2024 – Present</div>
+          </div>
+          <div class="t-body">
+            Full-stack ML engineering across data, training, evaluation, and publication-grade tooling.
+            <div class="mt-2">
+              <span class="pill">AMP</span>
+              <span class="pill">channels-last</span>
+              <span class="pill">grad-checkpoint</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Education -->
+  <!-- Education（学术时间轴） -->
   <section id="education" class="section">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-      <h2 class="text-2xl font-bold">Education</h2>
-      <div class="mt-6 space-y-4">
-        <div class="rounded-2xl border border-zinc-200 p-5 bg-white">
-          <div class="flex items-start justify-between">
+      <div class="section-hd mb-3">
+        <span class="kicker">Section 05</span><div class="rule"></div>
+      </div>
+      <h2 class="h2">Education</h2>
+
+      <div class="mt-8 timeline">
+        <div class="t-item">
+          <div class="t-dot"></div>
+          <div class="t-hd">
             <div>
-              <div class="font-medium">Intern — Shanghai Jiao Tong University, Shanghai <a class="underline" href="https://www.sjtu.edu.cn" target="_blank" rel="noopener">(sjtu.edu.cn)</a></div>
+              <div class="t-role">Intern</div>
+              <div class="t-where">Shanghai Jiao Tong University · Shanghai <a class="underline" href="https://www.sjtu.edu.cn" target="_blank" rel="noopener">(sjtu.edu.cn)</a></div>
             </div>
-            <div class="text-sm text-zinc-600">2025 – Present</div>
+            <div class="t-when">2025 – Present</div>
           </div>
         </div>
-        <div class="rounded-2xl border border-zinc-200 p-5 bg-white">
-          <div class="flex items-start justify-between">
+
+        <div class="t-item">
+          <div class="t-dot"></div>
+          <div class="t-hd">
             <div>
-              <div class="font-medium">Undergrad Student — School of Computer Science and Technology, Donghua University, Shanghai <a class="underline" href="https://mail.dhu.edu.cn" target="_blank" rel="noopener">(mail.dhu.edu.cn)</a></div>
+              <div class="t-role">Undergrad Student</div>
+              <div class="t-where">School of Computer Science & Technology, Donghua University · Shanghai <a class="underline" href="https://mail.dhu.edu.cn" target="_blank" rel="noopener">(mail.dhu.edu.cn)</a></div>
             </div>
-            <div class="text-sm text-zinc-600">2023 – Present</div>
+            <div class="t-when">2023 – Present</div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Contact -->
+  <!-- Contact（名片卡片） -->
   <section id="contact" class="section">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-      <h2 class="text-2xl font-bold">Contact</h2>
-      <div class="mt-4 text-sm text-zinc-700">
-        <p>Email: <a class="underline" href="mailto:tzulamlee@gmail.com">tzulamlee@gmail.com</a></p>
-        <p class="mt-2">Social:
-          <a class="underline" href="https://github.com/Lixeeone" target="_blank" rel="noopener">GitHub</a> ·
-          <a class="underline" href="https://huggingface.co/Lixeeone" target="_blank" rel="noopener">Hugging Face</a> ·
-          <a class="underline" href="https://orcid.org/0009-0002-4314-455X" target="_blank" rel="noopener">ORCID</a>
-        </p>
+      <div class="section-hd mb-3">
+        <span class="kicker">Section 06</span><div class="rule"></div>
       </div>
-      <p class="mt-8 text-xs text-zinc-500">© <span id="year"></span> ACHCI Lab · Lee Tzu Lam. All rights reserved.</p>
+      <h2 class="h2">Contact</h2>
+
+      <div class="mt-8 contact-card">
+        <div class="grid md:grid-cols-3 gap-6 items-center">
+          <div class="md:col-span-2">
+            <div class="text-sm muted">Email</div>
+            <a class="text-lg font-semibold underline" href="mailto:tzulamlee@gmail.com">tzulamlee@gmail.com</a>
+            <p class="mt-2 text-sm lead">For collaboration on affective computing, brain-inspired decision-making, and HCI.</p>
+          </div>
+          <div class="flex md:justify-end gap-3">
+            <a class="soft-btn" href="https://github.com/Lixeeone" target="_blank" rel="noopener">GitHub</a>
+            <a class="soft-btn" href="https://huggingface.co/Lixeeone" target="_blank" rel="noopener">Hugging Face</a>
+            <a class="soft-btn" href="https://orcid.org/0009-0002-4314-455X" target="_blank" rel="noopener">ORCID</a>
+          </div>
+        </div>
+      </div>
+
+      <p class="mt-10 text-xs muted">© <span id="year"></span> ACHCI Lab · Lee Tzu Lam. All rights reserved.</p>
     </div>
   </section>
 
-  <!-- Lightbox -->
+  <!-- Lightbox（保持） -->
   <div id="lb" class="lightbox" role="dialog" aria-modal="true" aria-label="Image preview">
     <span class="close">✕</span>
     <img id="lb-img" alt="preview"/>
   </div>
 
   <script>
-    // Update year
+    // Year
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Lightweight particle network (day mode)
+    // Particles（保持）
     const canvas = document.getElementById('particles');
     const ctx = canvas.getContext('2d');
     let W, H, DPR = Math.min(window.devicePixelRatio || 1, 2);
-    const N = 80;
-    const parts = [];
-    function resize(){
-      W = canvas.clientWidth = canvas.offsetWidth;
-      H = canvas.clientHeight = canvas.offsetHeight;
-      canvas.width = W * DPR; canvas.height = H * DPR; ctx.setTransform(DPR,0,0,DPR,0,0);
-    }
-    window.addEventListener('resize', resize, {passive:true});
-    resize();
-    function rnd(a,b){return a + Math.random()*(b-a)}
-    for(let i=0;i<N;i++){
-      parts.push({x:rnd(0,W), y:rnd(0,H*0.9), vx:rnd(-0.2,0.2), vy:rnd(-0.1,0.1), r:rnd(1,2.4), a:rnd(0.2,0.8)});
-    }
-    function step(){
+    const N = 80, parts = [];
+    function resize(){ W = canvas.clientWidth = canvas.offsetWidth; H = canvas.clientHeight = canvas.offsetHeight; canvas.width = W*DPR; canvas.height = H*DPR; ctx.setTransform(DPR,0,0,DPR,0,0); }
+    window.addEventListener('resize', resize, {passive:true}); resize();
+    function rnd(a,b){ return a + Math.random()*(b-a) }
+    for(let i=0;i<N;i++) parts.push({x:rnd(0,W), y:rnd(0,H*0.9), vx:rnd(-0.2,0.2), vy:rnd(-0.1,0.1), r:rnd(1,2.4), a:rnd(0.2,0.8)});
+    (function step(){
       ctx.clearRect(0,0,W,H);
-      for(const p of parts){
-        p.x+=p.vx; p.y+=p.vy;
-        if(p.x<0||p.x>W) p.vx*=-1; if(p.y<0||p.y>H) p.vy*=-1;
-        ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-        ctx.fillStyle = `rgba(80,80,120,${p.a})`;
-        ctx.fill();
-      }
-      for(let i=0;i<parts.length;i++){
-        for(let j=i+1;j<parts.length;j++){
-          const a=parts[i], b=parts[j];
-          const dx=a.x-b.x, dy=a.y-b.y, d=Math.hypot(dx,dy);
-          if(d<90){
-            ctx.strokeStyle = 'rgba(60,60,120,.06)';
-            ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
-          }
-        }
-      }
+      for(const p of parts){ p.x+=p.vx; p.y+=p.vy; if(p.x<0||p.x>W) p.vx*=-1; if(p.y<0||p.y>H) p.vy*=-1;
+        ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fillStyle=`rgba(80,80,120,${p.a})`; ctx.fill(); }
+      for(let i=0;i<parts.length;i++) for(let j=i+1;j<parts.length;j++){ const a=parts[i], b=parts[j], d=Math.hypot(a.x-b.x,a.y-b.y); if(d<90){ ctx.strokeStyle='rgba(60,60,120,.06)'; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke(); } }
       requestAnimationFrame(step);
-    }
-    step();
+    })();
 
-    // Lightbox interactions
-    const lb = document.getElementById('lb');
-    const lbImg = document.getElementById('lb-img');
+    // Lightbox
+    const lb = document.getElementById('lb'), lbImg = document.getElementById('lb-img');
     document.querySelectorAll('[data-lightbox]').forEach(img=>{
-      img.addEventListener('click', ()=>{
-        lbImg.src = img.getAttribute('data-lightbox');
-        lb.setAttribute('data-open','true');
-      });
+      img.addEventListener('click', ()=>{ lbImg.src = img.getAttribute('data-lightbox'); lb.setAttribute('data-open','true'); });
     });
-    lb.addEventListener('click', (e)=>{
-      if(e.target===lb || e.target.classList.contains('close')) lb.removeAttribute('data-open');
-    });
-    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') lb.removeAttribute('data-open'); });
+    lb.addEventListener('click', e=>{ if(e.target===lb || e.target.classList.contains('close')) lb.removeAttribute('data-open'); });
+    document.addEventListener('keydown', e=>{ if(e.key==='Escape') lb.removeAttribute('data-open'); });
   </script>
 </body>
 </html>
