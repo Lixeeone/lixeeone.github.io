@@ -4,47 +4,50 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Lee Tzu Lam — ACHCI Lab</title>
-  <meta name="description" content="Lee Tzu Lam — Founder of ACHCI Lab. Research in Affective Computing, Brain‑Inspired Cognitive Decision‑Making, and Human‑Computer Interaction."/>
+  <meta name="description" content="Lee Tzu Lam — Founder of ACHCI Lab. Research in Affective Computing, Brain-Inspired Cognitive Decision-Making, and Human-Computer Interaction."/>
   <meta name="author" content="Lee Tzu Lam" />
   <meta property="og:title" content="Lee Tzu Lam — ACHCI Lab" />
-  <meta property="og:description" content="Founder of ACHCI Lab. Affective Computing · Brain‑Inspired Cognition · HCI" />
+  <meta property="og:description" content="Founder of ACHCI Lab. Affective Computing · Brain-Inspired Cognition · HCI" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://lixeeone.github.io" />
   <meta property="og:image" content="assets/self.jpg" />
-  <!-- Favicon / Logo -->
   <link rel="icon" href="assets/logo.png" />
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>tailwind.config = { darkMode: 'class' };</script>
+  <!-- LaTeX-like serif for titles -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;700&display=swap" rel="stylesheet">
   <style>
     html { scroll-behavior: smooth; }
-    .gradient-text { background: linear-gradient(90deg, #0ea5e9, #6366f1, #ec4899); -webkit-background-clip: text; background-clip: text; color: transparent; }
-    .glass { background: rgba(255,255,255,0.6); backdrop-filter: blur(8px); }
-    .glass-dark { background: rgba(24,24,27,0.6); backdrop-filter: blur(8px); }
+    body { background: #ffffff; color: #161616; }
+    .glass { background: rgba(255,255,255,0.7); backdrop-filter: blur(8px); }
+    .section { border-top: 1px solid #e9e9e9; }
+    .latex-title { font-family: "EB Garamond", ui-serif, Georgia, "Times New Roman", serif; letter-spacing: .02em; }
+    .latex-smcaps { font-variant: small-caps; }
     .icon { width: 18px; height: 18px; display: inline-block; vertical-align: -3px; margin-right: 6px; }
-    /* Animated subtle gradient underneath particles */
-    .moving-gradient::before {
-      content: ""; position: absolute; inset: 0; z-index: 0; opacity: .6;
-      background: radial-gradient(60% 50% at 50% 10%, rgba(99,102,241,.25), transparent 60%),
-                  radial-gradient(40% 30% at 80% 0%, rgba(14,165,233,.25), transparent 60%),
-                  radial-gradient(30% 25% at 20% 0%, rgba(236,72,153,.22), transparent 60%);
+    /* Hero gradient + particles */
+    .moving-gradient::before{
+      content:""; position:absolute; inset:0; z-index:0; opacity:.6;
+      background: radial-gradient(60% 50% at 50% 10%, rgba(99,102,241,.20), transparent 60%),
+                  radial-gradient(40% 30% at 80% 0%, rgba(14,165,233,.18), transparent 60%),
+                  radial-gradient(30% 25% at 20% 0%, rgba(236,72,153,.16), transparent 60%);
       animation: floatGrad 18s ease-in-out infinite alternate;
-      pointer-events: none;
+      pointer-events:none;
     }
     @keyframes floatGrad { 0%{transform: translateY(-3%) scale(1);} 100%{transform: translateY(3%) scale(1.05);} }
-    /* Particle canvas sits on top of gradient, below content */
     #particles { position:absolute; inset:0; z-index:1; pointer-events:none; opacity:.6; }
-    .hero-inner { position:relative; z-index:2; }
+    .hero-inner{ position:relative; z-index:2; }
   </style>
 </head>
-<body class="bg-white text-zinc-800 antialiased dark:bg-zinc-900 dark:text-zinc-100">
+<body class="antialiased">
   <!-- Top nav -->
-  <header class="sticky top-0 z-50 border-b border-zinc-200/70 dark:border-zinc-800/80 glass dark:glass-dark">
+  <header class="sticky top-0 z-50 border-b border-zinc-200 glass">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
       <a href="#home" class="flex items-center gap-3">
         <img src="assets/logo.png" alt="ACHCI Lab logo" class="w-12 h-12 rounded-lg object-contain" onerror="this.src='https://github.com/Lixeeone.png'"/>
         <span class="font-semibold">ACHCI Lab</span>
       </a>
-      <nav class="hidden md:flex items-center gap-6 text-sm">
+      <nav class="hidden md:flex items-center gap-6 text-sm text-zinc-700">
         <a href="#research" class="hover:opacity-80">Research</a>
         <a href="#highlights" class="hover:opacity-80">Highlights</a>
         <a href="#publications" class="hover:opacity-80">Publications</a>
@@ -52,40 +55,39 @@
         <a href="#education" class="hover:opacity-80">Education</a>
         <a href="#contact" class="hover:opacity-80">Contact</a>
       </nav>
-      <button id="themeToggle" aria-label="Toggle dark mode" class="rounded-xl px-3 py-1 text-sm border border-zinc-300 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-800">Theme</button>
     </div>
   </header>
 
-  <!-- Hero with moving gradient + particles -->
+  <!-- Hero -->
   <section id="home" class="relative overflow-hidden moving-gradient">
     <canvas id="particles" aria-hidden="true"></canvas>
     <div class="hero-inner relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
       <div class="grid md:grid-cols-5 gap-10 items-center">
         <div class="md:col-span-3">
-          <p class="text-sm uppercase tracking-widest text-zinc-600 dark:text-zinc-400">Founder, ACHCI Lab</p>
+          <p class="text-sm uppercase tracking-widest text-zinc-600">Founder, ACHCI Lab</p>
           <h1 class="mt-2 text-4xl sm:text-5xl font-extrabold leading-tight">Lee Tzu Lam</h1>
-          <p class="mt-4 text-lg leading-relaxed text-zinc-700 dark:text-zinc-300">
-            My research spans <span class="font-medium">Affective Computing</span>, <span class="font-medium">Brain‑Inspired Cognitive Decision‑Making</span>, and <span class="font-medium">Human‑Computer Interaction</span>. I build reproducible AI systems and multimodal models that understand and respond to human emotion.
+          <p class="mt-4 text-lg leading-relaxed text-zinc-700">
+            My research spans <span class="font-medium">Affective Computing</span>, <span class="font-medium">Brain-Inspired Cognitive Decision-Making</span>, and <span class="font-medium">Human-Computer Interaction</span>. I build reproducible AI systems and multimodal models that understand and respond to human emotion.
           </p>
           <div class="mt-6 flex flex-wrap gap-3">
-            <a class="inline-flex items-center gap-2 rounded-2xl border border-zinc-300 dark:border-zinc-700 px-4 py-2 text-sm hover:bg-zinc-50 dark:hover:bg-zinc-800" href="https://github.com/Lixeeone" target="_blank" rel="noopener">
+            <a class="inline-flex items-center gap-2 rounded-2xl border border-zinc-300 px-4 py-2 text-sm hover:bg-zinc-50" href="https://github.com/Lixeeone" target="_blank" rel="noopener">
               <svg class="icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 .2a7.8 7.8 0 0 0-2.5 15.2c.4.1.6-.2.6-.4v-1.5c-2.4.5-2.9-1.1-2.9-1.1-.4-1-.9-1.3-.9-1.3-.8-.6.1-.6.1-.6 1 .1 1.6 1 1.6 1 .8 1.5 2.2 1.1 2.7.8.1-.6.3-1.1.6-1.3-1.9-.2-3.9-1-3.9-4.3 0-.9.3-1.6.8-2.2 0-.2-.3-1 .1-2.1 0 0 .7-.2 2.2.8.6-.2 1.2-.2 1.8-.2s1.2 0 1.8.2c1.5-1 2.2-.8 2.2-.8.4 1.1.1 1.9.1 2.1.5.6.8 1.3.8 2.2 0 3.3-2 4-3.9 4.3.3.2.6.7.6 1.5v2.2c0 .2.2.5.6.4A7.8 7.8 0 0 0 8 .2z"/></svg>
               GitHub
             </a>
-            <a class="inline-flex items-center gap-2 rounded-2xl border border-zinc-300 dark:border-zinc-700 px-4 py-2 text-sm hover:bg-zinc-50 dark:hover:bg-zinc-800" href="https://huggingface.co/Lixeeone" target="_blank" rel="noopener">
+            <a class="inline-flex items-center gap-2 rounded-2xl border border-zinc-300 px-4 py-2 text-sm hover:bg-zinc-50" href="https://huggingface.co/Lixeeone" target="_blank" rel="noopener">
               <img class="icon" src="https://huggingface.co/front/assets/huggingface_logo-noborder.svg" alt="Hugging Face"/>
               Hugging Face
             </a>
-            <a class="inline-flex items-center gap-2 rounded-2xl border border-zinc-300 dark:border-zinc-700 px-4 py-2 text-sm hover:bg-zinc-50 dark:hover:bg-zinc-800" href="https://orcid.org/0009-0002-4314-455X" target="_blank" rel="noopener">
+            <a class="inline-flex items-center gap-2 rounded-2xl border border-zinc-300 px-4 py-2 text-sm hover:bg-zinc-50" href="https://orcid.org/0009-0002-4314-455X" target="_blank" rel="noopener">
               <svg class="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 1.5a10.5 10.5 0 1 0 0 21 10.5 10.5 0 0 0 0-21Zm-2.7 5.2h1.3v10.6H9.3V6.7Zm3.7 0c2.5 0 4.3 1.8 4.3 4.4s-1.8 4.4-4.3 4.4h-2V6.7h2Zm0 1.3h-.7v6.2h.7c1.9 0 3.1-1.3 3.1-3.1 0-1.8-1.2-3.1-3.1-3.1Z"/></svg>
               ORCID
             </a>
           </div>
         </div>
         <div class="md:col-span-2 flex justify-center md:justify-end">
-          <!-- Right: Personal portrait -->
-          <div class="p-4 rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white/60 dark:bg-zinc-900/60 backdrop-blur">
-            <img src="assets/self.jpg" alt="Portrait of Lee Tzu Lam" class="w-48 h-48 rounded-2xl object-cover"/>
+          <!-- Portrait: show original ratio (no crop) -->
+          <div class="p-4 rounded-3xl border border-zinc-200 bg-white/70 backdrop-blur">
+            <img src="assets/self.jpg" alt="Portrait of Lee Tzu Lam" class="max-w-xs w-auto h-auto rounded-2xl object-contain"/>
           </div>
         </div>
       </div>
@@ -93,45 +95,45 @@
   </section>
 
   <!-- Research areas -->
-  <section id="research" class="border-t border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950">
+  <section id="research" class="section">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       <h2 class="text-2xl font-bold">Research Areas</h2>
-      <p class="mt-2 text-zinc-600 dark:text-zinc-400">Core themes driving my current projects.</p>
+      <p class="mt-2 text-zinc-600">Core themes driving my current projects.</p>
       <div class="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <article class="rounded-2xl border border-zinc-200 dark:border-zinc-800 p-5 bg-white dark:bg-zinc-900">
+        <article class="rounded-2xl border border-zinc-200 p-5 bg-white">
           <h3 class="font-semibold">Affective Computing</h3>
-          <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-400">Multimodal emotion recognition and controllable, VAD‑consistent generation; reliability testing under polarity flips.</p>
+          <p class="mt-2 text-sm text-zinc-600">Multimodal emotion recognition and controllable, VAD-consistent generation; reliability testing under polarity flips.</p>
         </article>
-        <article class="rounded-2xl border border-zinc-200 dark:border-zinc-800 p-5 bg-white dark:bg-zinc-900">
-          <h3 class="font-semibold">Brain‑Inspired Cognitive Decision‑Making</h3>
-          <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-400">Neuro‑symbolic priors, appraisal mechanisms, self‑elicited knowledge distillation to shape reasoning in LMs.</p>
+        <article class="rounded-2xl border border-zinc-200 p-5 bg-white">
+          <h3 class="font-semibold">Brain-Inspired Cognitive Decision-Making</h3>
+          <p class="mt-2 text-sm text-zinc-600">Neuro-symbolic priors, appraisal mechanisms, and self-elicited knowledge distillation to shape reasoning in LMs.</p>
         </article>
-        <article class="rounded-2xl border border-zinc-200 dark:border-zinc-800 p-5 bg-white dark:bg-zinc-900">
-          <h3 class="font-semibold">Human‑Computer Interaction</h3>
-          <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-400">Emotion‑centric dialogue systems, trustworthy interaction, and assistive tools for research reproducibility.</p>
+        <article class="rounded-2xl border border-zinc-200 p-5 bg-white">
+          <h3 class="font-semibold">Human-Computer Interaction</h3>
+          <p class="mt-2 text-sm text-zinc-600">Emotion-centric dialogue systems, trustworthy interaction, and assistive tools for research reproducibility.</p>
         </article>
       </div>
     </div>
   </section>
 
   <!-- Highlights -->
-  <section id="highlights" class="border-t border-zinc-200 dark:border-zinc-800">
+  <section id="highlights" class="section">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       <h2 class="text-2xl font-bold">Selected Highlights</h2>
       <ul class="mt-6 grid md:grid-cols-2 gap-6 text-sm">
-        <li class="rounded-2xl border border-zinc-200 dark:border-zinc-800 p-5 bg-white dark:bg-zinc-900">
-          <div class="font-medium">NeuroGaze‑Distill</div>
-          <ul class="mt-2 list-disc list-inside text-zinc-600 dark:text-zinc-400 space-y-1">
-            <li>Teacher prototypes from DREAMER & MAHNOB‑HCI EEG topomaps; consolidated 5×5 Valence/Arousal grid.</li>
-            <li>Student trained on FERPlus/AffectNet‑mini; no EEG or gaze needed at deployment.</li>
-            <li>Lightweight regularizers including Proto‑KD (cosine) and depression‑inspired geometric prior (D‑Geo).</li>
+        <li class="rounded-2xl border border-zinc-200 p-5 bg-white">
+          <div class="font-medium">NeuroGaze-Distill</div>
+          <ul class="mt-2 list-disc list-inside text-zinc-600 space-y-1">
+            <li>Teacher prototypes from DREAMER & MAHNOB-HCI EEG topomaps; consolidated 5×5 Valence/Arousal grid.</li>
+            <li>Student trained on FERPlus/AffectNet-mini; no EEG or gaze needed at deployment.</li>
+            <li>Lightweight regularizers including Proto-KD (cosine) and depression-inspired geometric prior (D-Geo).</li>
           </ul>
         </li>
-        <li class="rounded-2xl border border-zinc-200 dark:border-zinc-800 p-5 bg-white dark:bg-zinc-900">
-          <div class="font-medium">EmoLoom‑2B</div>
-          <ul class="mt-2 list-disc list-inside text-zinc-600 dark:text-zinc-400 space-y-1">
-            <li>~2B‑parameter LLM for emotion‑centric QA/VAD; releases on GitHub & Hugging Face.</li>
-            <li>VAD‑preserving losses and an appraisal verifier; stress‑tests for valence flips and format robustness.</li>
+        <li class="rounded-2xl border border-zinc-200 p-5 bg-white">
+          <div class="font-medium">EmoLoom-2B</div>
+          <ul class="mt-2 list-disc list-inside text-zinc-600 space-y-1">
+            <li>~2B-parameter LLM for emotion-centric QA/VAD; releases on GitHub & Hugging Face.</li>
+            <li>VAD-preserving losses and an appraisal verifier; stress-tests for valence flips and format robustness.</li>
             <li>Reproducible pipelines with Conda, offline caches, and deterministic evaluation scripts.</li>
           </ul>
         </li>
@@ -139,63 +141,101 @@
     </div>
   </section>
 
-  <!-- Publications -->
-  <section id="publications" class="border-t border-zinc-200 dark:border-zinc-800">
+  <!-- Publications: left text + right embedded PDF views (assets/*.pdf), LaTeX-like titles -->
+  <section id="publications" class="section">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       <h2 class="text-2xl font-bold">Selected Publications</h2>
-      <ul class="mt-6 space-y-4 text-sm">
-        <li class="rounded-2xl border border-zinc-200 dark:border-zinc-800 p-4 bg-white dark:bg-zinc-900">
-          <div class="font-medium">NeuroGaze‑Distill: Brain‑informed Distillation and Depression‑Inspired Geometric Priors for Robust Facial Emotion Recognition — <a class="underline" href="https://arxiv.org/abs/2509.11916" target="_blank" rel="noopener">arXiv:2509.11916</a> (2025)</div>
-          <div class="text-zinc-600 dark:text-zinc-400">Zilin Li, Weiwei Xu, Xuanqi Zhao, Yiran Zhu</div>
-        </li>
-        <li class="rounded-2xl border border-zinc-200 dark:border-zinc-800 p-4 bg-white dark:bg-zinc-900">
-          <div class="font-medium">Flattened No More: Teaching VLMs to Think Stepwise via Self‑Elicited Knowledge Distillation</div>
-          <div class="text-zinc-600 dark:text-zinc-400">Preprint / ICLR target, 2025.</div>
-        </li>
-        <li class="rounded-2xl border border-zinc-200 dark:border-zinc-800 p-4 bg-white dark:bg-zinc-900">
-          <div class="font-medium">EmoLoom‑2B: Emotion‑centric QA/VAD Large Language Model</div>
-          <div class="text-zinc-600 dark:text-zinc-400">Model release & report, 2025. <a class="underline" href="https://huggingface.co/Lixeeone/Emoloom-2B" target="_blank" rel="noopener">HF</a></div>
-        </li>
-      </ul>
+
+      <!-- NeuroGaze-Distill -->
+      <div class="mt-8 grid md:grid-cols-2 gap-6 items-start">
+        <div class="rounded-2xl border border-zinc-200 p-6 bg-white">
+          <h3 class="latex-title text-2xl leading-snug">
+            <span class="latex-smcaps">NeuroGaze–Distill: Brain-informed Distillation and Depression–Inspired Geometric Priors for Robust Facial Emotion Recognition</span>
+          </h3>
+          <p class="mt-2 text-sm text-zinc-600">Zilin Li, Weiwei Xu, Xuanqi Zhao, Yiran Zhu · 2025</p>
+          <p class="mt-3 text-sm text-zinc-700">
+            Cross-modal distillation that transfers neuro-informed priors into an image-only FER student via static V/A prototypes and a depression-inspired geometric prior. Student models trained on FERPlus/AffectNet-mini require no EEG/gaze at deployment.
+          </p>
+          <div class="mt-3 text-sm">
+            <a class="underline" href="https://arxiv.org/abs/2509.11916" target="_blank" rel="noopener">arXiv:2509.11916</a>
+          </div>
+        </div>
+        <div class="rounded-2xl border border-zinc-200 p-3 bg-white">
+          <object data="assets/N.pdf#toolbar=0&navpanes=0&scrollbar=0&statusbar=0&messages=0&view=FitH" type="application/pdf" title="NeuroGaze-Distill PDF" class="w-full h-[360px] rounded-xl border border-zinc-200"></object>
+        </div>
+      </div>
+
+      <!-- Flattened No More -->
+      <div class="mt-8 grid md:grid-cols-2 gap-6 items-start">
+        <div class="rounded-2xl border border-zinc-200 p-6 bg-white">
+          <h3 class="latex-title text-2xl leading-snug">
+            <span class="latex-smcaps">Flattened No More: Teaching VLMs to Think Stepwise via Self-Elicited Knowledge Distillation</span>
+          </h3>
+          <p class="mt-2 text-sm text-zinc-600">Revised · Targeting <b>CVPR 2026</b></p>
+          <p class="mt-3 text-sm text-zinc-700">
+            We elicit and distill self-generated intermediate rationales from VLMs to encourage stepwise reasoning. The method improves chain-of-thought faithfulness while keeping decoding simple and reproducible.
+          </p>
+        </div>
+        <div class="rounded-2xl border border-zinc-200 p-3 bg-white">
+          <object data="assets/F.pdf#toolbar=0&navpanes=0&scrollbar=0&statusbar=0&messages=0&view=FitH" type="application/pdf" title="Flattened No More PDF" class="w-full h-[360px] rounded-xl border border-zinc-200"></object>
+        </div>
+      </div>
+
+      <!-- EmoLoom-2B -->
+      <div class="mt-8 grid md:grid-cols-2 gap-6 items-start">
+        <div class="rounded-2xl border border-zinc-200 p-6 bg-white">
+          <h3 class="latex-title text-2xl leading-snug">
+            <span class="latex-smcaps">EmoLoom–2B: Emotion-centric QA/VAD Large Language Model</span>
+          </h3>
+          <p class="mt-2 text-sm text-zinc-600">arXiv planned in <b>2026</b> · <a class="underline" href="https://huggingface.co/Lixeeone/Emoloom-2B" target="_blank" rel="noopener">HF model page</a></p>
+          <p class="mt-3 text-sm text-zinc-700">
+            A ~2B-parameter LLM tailored for emotion-centric QA with VAD-preserving objectives and an appraisal verifier. Stress-tests show steadier valence under polarity flips and fewer format failures.
+          </p>
+        </div>
+        <div class="rounded-2xl border border-zinc-200 p-3 bg-white">
+          <object data="assets/E.pdf#toolbar=0&navpanes=0&scrollbar=0&statusbar=0&messages=0&view=FitH" type="application/pdf" title="EmoLoom-2B PDF" class="w-full h-[360px] rounded-xl border border-zinc-200"></object>
+        </div>
+      </div>
+
     </div>
   </section>
 
   <!-- Experience -->
-  <section id="experience" class="border-t border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950">
+  <section id="experience" class="section">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       <h2 class="text-2xl font-bold">Research & Leadership Experience</h2>
       <div class="mt-6 grid md:grid-cols-2 gap-6">
-        <div class="rounded-2xl border border-zinc-200 dark:border-zinc-800 p-5 bg-white dark:bg-zinc-900">
-          <h3 class="font-semibold">Founder, <span class="gradient-text">ACHCI Lab</span></h3>
-          <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-400">Leading research on affect‑aware intelligence, building open, reproducible pipelines and model releases.</p>
+        <div class="rounded-2xl border border-zinc-200 p-5 bg-white">
+          <h3 class="font-semibold">Founder, ACHCI Lab</h3>
+          <p class="mt-2 text-sm text-zinc-600">Leading research on affect-aware intelligence; building open, reproducible pipelines and model releases.</p>
         </div>
-        <div class="rounded-2xl border border-zinc-200 dark:border-zinc-800 p-5 bg-white dark:bg-zinc-900">
+        <div class="rounded-2xl border border-zinc-200 p-5 bg-white">
           <h3 class="font-semibold">Research Engineer & Collaborator</h3>
-          <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-400">Full‑stack ML engineering across data, training, evaluation, and publication‑ready tooling (AMP, channels‑last, gradient checkpointing).</p>
+          <p class="mt-2 text-sm text-zinc-600">Full-stack ML engineering across data, training, evaluation, and publication-grade tooling (AMP, channels-last, gradient checkpointing).</p>
         </div>
       </div>
     </div>
   </section>
 
   <!-- Education -->
-  <section id="education" class="border-t border-zinc-200 dark:border-zinc-800">
+  <section id="education" class="section">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       <h2 class="text-2xl font-bold">Education</h2>
       <div class="mt-6 space-y-4">
-        <div class="rounded-2xl border border-zinc-200 dark:border-zinc-800 p-5 bg-white dark:bg-zinc-900">
+        <div class="rounded-2xl border border-zinc-200 p-5 bg-white">
           <div class="flex items-start justify-between">
             <div>
               <div class="font-medium">Intern — Shanghai Jiao Tong University, Shanghai <a class="underline" href="https://www.sjtu.edu.cn" target="_blank" rel="noopener">(sjtu.edu.cn)</a></div>
             </div>
-            <div class="text-sm text-zinc-600 dark:text-zinc-400">2025 – Present</div>
+            <div class="text-sm text-zinc-600">2025 – Present</div>
           </div>
         </div>
-        <div class="rounded-2xl border border-zinc-200 dark:border-zinc-800 p-5 bg-white dark:bg-zinc-900">
+        <div class="rounded-2xl border border-zinc-200 p-5 bg-white">
           <div class="flex items-start justify-between">
             <div>
               <div class="font-medium">Undergrad Student — School of Computer Science and Technology, Donghua University, Shanghai <a class="underline" href="https://mail.dhu.edu.cn" target="_blank" rel="noopener">(mail.dhu.edu.cn)</a></div>
             </div>
-            <div class="text-sm text-zinc-600 dark:text-zinc-400">2023 – Present</div>
+            <div class="text-sm text-zinc-600">2023 – Present</div>
           </div>
         </div>
       </div>
@@ -203,10 +243,10 @@
   </section>
 
   <!-- Contact -->
-  <section id="contact" class="border-t border-zinc-200 dark:border-zinc-800">
+  <section id="contact" class="section">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       <h2 class="text-2xl font-bold">Contact</h2>
-      <div class="mt-4 text-sm text-zinc-700 dark:text-zinc-300">
+      <div class="mt-4 text-sm text-zinc-700">
         <p>Email: <a class="underline" href="mailto:tzulamlee@gmail.com">tzulamlee@gmail.com</a></p>
         <p class="mt-2">Social:
           <a class="underline" href="https://github.com/Lixeeone" target="_blank" rel="noopener">GitHub</a> ·
@@ -214,30 +254,19 @@
           <a class="underline" href="https://orcid.org/0009-0002-4314-455X" target="_blank" rel="noopener">ORCID</a>
         </p>
       </div>
-      <p class="mt-8 text-xs text-zinc-500 dark:text-zinc-400">© <span id="year"></span> ACHCI Lab · Lee Tzu Lam. All rights reserved.</p>
+      <p class="mt-8 text-xs text-zinc-500">© <span id="year"></span> ACHCI Lab · Lee Tzu Lam. All rights reserved.</p>
     </div>
   </section>
 
   <script>
-    // Theme toggle + remember preference
-    const KEY = 'theme-preference';
-    const root = document.documentElement;
-    const initial = localStorage.getItem(KEY);
-    if (initial === 'dark' || (!initial && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-      root.classList.add('dark');
-    }
-    document.getElementById('themeToggle').addEventListener('click', () => {
-      root.classList.toggle('dark');
-      localStorage.setItem(KEY, root.classList.contains('dark') ? 'dark' : 'light');
-    });
-    // Auto-update year
+    // Update year
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // --- Minimal particle system ---
+    // Lightweight particle network (day mode)
     const canvas = document.getElementById('particles');
     const ctx = canvas.getContext('2d');
     let W, H, DPR = Math.min(window.devicePixelRatio || 1, 2);
-    const N = 80; // particle count
+    const N = 80;
     const parts = [];
     function resize(){
       W = canvas.clientWidth = canvas.offsetWidth;
@@ -256,16 +285,15 @@
         p.x+=p.vx; p.y+=p.vy;
         if(p.x<0||p.x>W) p.vx*=-1; if(p.y<0||p.y>H) p.vy*=-1;
         ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-        ctx.fillStyle = `rgba(${root.classList.contains('dark')? '200,200,255' : '80,80,120'},${p.a})`;
+        ctx.fillStyle = `rgba(80,80,120,${p.a})`;
         ctx.fill();
       }
-      // soft links
       for(let i=0;i<parts.length;i++){
         for(let j=i+1;j<parts.length;j++){
           const a=parts[i], b=parts[j];
           const dx=a.x-b.x, dy=a.y-b.y, d=Math.hypot(dx,dy);
           if(d<90){
-            ctx.strokeStyle = root.classList.contains('dark')? 'rgba(180,180,255,.06)' : 'rgba(60,60,120,.06)';
+            ctx.strokeStyle = 'rgba(60,60,120,.06)';
             ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
           }
         }
