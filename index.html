@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lee Tzu Lam — ACHCI Lab</title>
+  <meta name="description" content="Lee Tzu Lam — Founder of ACHCI Lab. Research in Affective Computing, Brain‑Inspired Cognitive Decision‑Making, and Human‑Computer Interaction."/>
+  <meta name="author" content="Lee Tzu Lam" />
+  <meta property="og:title" content="Lee Tzu Lam — ACHCI Lab" />
+  <meta property="og:description" content="Founder of ACHCI Lab. Affective Computing · Brain‑Inspired Cognition · HCI" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://lixeeone.github.io" />
+  <meta property="og:image" content="https://github.com/Lixeeone.png" />
+  <link rel="icon" href="/assets/logo.png" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // Tailwind config: enable dark mode by class
+    tailwind.config = { darkMode: 'class' }
+  </script>
+  <style>
+    html { scroll-behavior: smooth; }
+    .gradient-text { background: linear-gradient(90deg, #0ea5e9, #6366f1, #ec4899); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .glass { background: rgba(255,255,255,0.6); backdrop-filter: blur(8px); }
+    .glass-dark { background: rgba(24,24,27,0.6); backdrop-filter: blur(8px); }
+  </style>
+</head>
+<body class="bg-white text-zinc-800 antialiased dark:bg-zinc-900 dark:text-zinc-100">
+  <!-- Top nav -->
+  <header class="sticky top-0 z-50 border-b border-zinc-200/70 dark:border-zinc-800/80 glass dark:glass-dark">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="#home" class="flex items-center gap-3">
+        <img src="/assets/logo.png" alt="ACHCI Lab logo" class="w-9 h-9 rounded-xl"/>
+        <span class="font-semibold">ACHCI Lab</span>
+      </a>
+      <nav class="hidden md:flex items-center gap-6 text-sm">
+        <a href="#research" class="hover:opacity-80">Research</a>
+        <a href="#publications" class="hover:opacity-80">Publications</a>
+        <a href="#experience" class="hover:opacity-80">Experience</a>
+        <a href="#education" class="hover:opacity-80">Education</a>
+        <a href="#contact" class="hover:opacity-80">Contact</a>
+      </nav>
+      <button id="themeToggle" aria-label="Toggle dark mode" class="rounded-xl px-3 py-1 text-sm border border-zinc-300 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-800">Theme</button>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section id="home" class="relative overflow-hidden">
+    <div aria-hidden class="pointer-events-none absolute inset-0 opacity-70 dark:opacity-50" style="background: radial-gradient(60% 50% at 50% 20%, rgba(99,102,241,.25), transparent 60%), radial-gradient(40% 30% at 70% 10%, rgba(14,165,233,.25), transparent 60%), radial-gradient(30% 25% at 30% 0%, rgba(236,72,153,.22), transparent 60%)"></div>
+    <div class="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+      <div class="grid md:grid-cols-5 gap-10 items-center">
+        <div class="md:col-span-3">
+          <p class="text-sm uppercase tracking-widest text-zinc-600 dark:text-zinc-400">Founder, ACHCI Lab</p>
+          <h1 class="mt-2 text-4xl sm:text-5xl font-extrabold leading-tight">
+            Lee Tzu Lam
+          </h1>
+          <p class="mt-4 text-lg leading-relaxed text-zinc-700 dark:text-zinc-300">
+            My research spans <span class="font-medium">Affective Computing</span>, <span class="font-medium">Brain‑Inspired Cognitive Decision‑Making</span>, and <span class="font-medium">Human‑Computer Interaction</span>. I build reproducible AI systems and multimodal models that understand and respond to human emotion.
+          </p>
+          <div class="mt-6 flex flex-wrap gap-3">
+            <a class="inline-flex items-center gap-2 rounded-2xl border border-zinc-300 dark:border-zinc-700 px-4 py-2 text-sm hover:bg-zinc-50 dark:hover:bg-zinc-800" href="https://github.com/Lixeeone" target="_blank" rel="noopener">GitHub</a>
+            <a class="inline-flex items-center gap-2 rounded-2xl border border-zinc-300 dark:border-zinc-700 px-4 py-2 text-sm hover:bg-zinc-50 dark:hover:bg-zinc-800" href="https://huggingface.co/Lixeeone" target="_blank" rel="noopener">Hugging Face</a>
+            <a class="inline-flex items-center gap-2 rounded-2xl bg-zinc-900 text-white px-4 py-2 text-sm hover:bg-black dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-200" href="#research">Explore Research</a>
+          </div>
+        </div>
+        <div class="md:col-span-2 flex justify-center md:justify-end">
+          <div class="p-4 rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white/60 dark:bg-zinc-900/60 backdrop-blur">
+            <img src="/assets/logo.png" alt="ACHCI Lab logo large" class="w-48 h-48 object-contain"/>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Research areas -->
+  <section id="research" class="border-t border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <h2 class="text-2xl font-bold">Research Areas</h2>
+      <p class="mt-2 text-zinc-600 dark:text-zinc-400">Core themes driving my current projects.</p>
+      <div class="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <article class="rounded-2xl border border-zinc-200 dark:border-zinc-800 p-5 bg-white dark:bg-zinc-900">
+          <h3 class="font-semibold">Affective Computing</h3>
+          <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-400">Multimodal emotion recognition, VAD‑consistent generation, stress‑tests for polarity robustness.</p>
+        </article>
+        <article class="rounded-2xl border border-zinc-200 dark:border-zinc-800 p-5 bg-white dark:bg-zinc-900">
+          <h3 class="font-semibold">Brain‑Inspired Cognitive Decision‑Making</h3>
+          <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-400">Neuro‑symbolic priors, appraisal mechanisms, and self‑elicited knowledge distillation for reasoning.</p>
+        </article>
+        <article class="rounded-2xl border border-zinc-200 dark:border-zinc-800 p-5 bg-white dark:bg-zinc-900">
+          <h3 class="font-semibold">Human‑Computer Interaction</h3>
+          <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-400">Emotion‑centric dialogue systems and evaluation, trustworthy interfaces, and assistive collaboration.</p>
+        </article>
+      </div>
+
+      <div class="mt-8 flex flex-wrap gap-2 text-xs">
+        <span class="rounded-full px-3 py-1 border border-zinc-300 dark:border-zinc-700">LLM Reasoning</span>
+        <span class="rounded-full px-3 py-1 border border-zinc-300 dark:border-zinc-700">Multimodal Learning</span>
+        <span class="rounded-full px-3 py-1 border border-zinc-300 dark:border-zinc-700">EEG · Gaze · Face</span>
+        <span class="rounded-full px-3 py-1 border border-zinc-300 dark:border-zinc-700">Reproducible ML</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Publications -->
+  <section id="publications" class="border-t border-zinc-200 dark:border-zinc-800">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <h2 class="text-2xl font-bold">Selected Publications</h2>
+      <ul class="mt-6 space-y-4 text-sm">
+        <li class="rounded-2xl border border-zinc-200 dark:border-zinc-800 p-4 bg-white dark:bg-zinc-900">
+          <div class="font-medium">Flattened No More: Teaching VLMs to Think Stepwise via Self‑Elicited Knowledge Distillation</div>
+          <div class="text-zinc-600 dark:text-zinc-400">Preprint / ICLR target, 2025. <span class="italic">Manuscript in preparation.</span></div>
+        </li>
+        <li class="rounded-2xl border border-zinc-200 dark:border-zinc-800 p-4 bg-white dark:bg-zinc-900">
+          <div class="font-medium">NeuroGaze‑Distill: Cross‑modal EEG + Gaze → Face for Robust Emotion</div>
+          <div class="text-zinc-600 dark:text-zinc-400">arXiv (in preparation), 2025.</div>
+        </li>
+        <li class="rounded-2xl border border-zinc-200 dark:border-zinc-800 p-4 bg-white dark:bg-zinc-900">
+          <div class="font-medium">EmoLoom‑2B: Emotion‑centric QA/VAD Large Language Model</div>
+          <div class="text-zinc-600 dark:text-zinc-400">Model release & report, 2025.</div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Experience -->
+  <section id="experience" class="border-t border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <h2 class="text-2xl font-bold">Research & Leadership Experience</h2>
+      <div class="mt-6 grid md:grid-cols-2 gap-6">
+        <div class="rounded-2xl border border-zinc-200 dark:border-zinc-800 p-5 bg-white dark:bg-zinc-900">
+          <h3 class="font-semibold">Founder, <span class="gradient-text">ACHCI Lab</span></h3>
+          <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-400">Leading research on affect‑aware intelligence, building open, reproducible pipelines and model releases.</p>
+          <ul class="mt-3 list-disc list-inside text-sm text-zinc-700 dark:text-zinc-300">
+            <li>NeuroGaze‑Distill — teacher prototypes from DREAMER & MAHNOB‑HCI; student models on FERPlus/AffectNet‑mini.</li>
+            <li>EmoLoom‑2B — emotion‑centric QA/VAD LLM with VAD‑preserving objectives and appraisal verification.</li>
+          </ul>
+        </div>
+        <div class="rounded-2xl border border-zinc-200 dark:border-zinc-800 p-5 bg-white dark:bg-zinc-900">
+          <h3 class="font-semibold">Research Engineer & Collaborator</h3>
+          <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-400">Full‑stack ML engineering across data, training, evaluation, and publication‑ready tooling.</p>
+          <ul class="mt-3 list-disc list-inside text-sm text-zinc-700 dark:text-zinc-300">
+            <li>Deterministic environments (Conda), offline caches, and reproducible experiments.</li>
+            <li>GPU efficiency: AMP, channels‑last, gradient checkpointing, and memory‑aware scheduling.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Education -->
+  <section id="education" class="border-t border-zinc-200 dark:border-zinc-800">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <h2 class="text-2xl font-bold">Education</h2>
+      <ol class="mt-6 relative border-s border-zinc-200 dark:border-zinc-800">
+        <li class="mb-10 ms-6">
+          <span class="absolute -start-3 flex h-6 w-6 items-center justify-center rounded-full border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900">🎓</span>
+          <h3 class="font-medium">[Your University], [Degree, Major]</h3>
+          <p class="text-sm text-zinc-600 dark:text-zinc-400">Years — Coursework: ML, HCI, Cognitive Science. (Replace with your actual info.)</p>
+        </li>
+        <li class="mb-2 ms-6">
+          <span class="absolute -start-3 flex h-6 w-6 items-center justify-center rounded-full border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900">🎓</span>
+          <h3 class="font-medium">[Another Institution], [Degree]</h3>
+          <p class="text-sm text-zinc-600 dark:text-zinc-400">Years — Honors/Scholarships, Lab activities. (Replace.)</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- Callouts: Projects -->
+  <section class="border-t border-zinc-200 dark:border-zinc-800 bg-gradient-to-b from-white to-zinc-50 dark:from-zinc-900 dark:to-zinc-950">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <h2 class="text-2xl font-bold">Open Projects</h2>
+      <div class="mt-6 grid md:grid-cols-2 gap-6">
+        <article class="rounded-2xl border border-zinc-200 dark:border-zinc-800 p-5 bg-white dark:bg-zinc-900">
+          <h3 class="font-semibold">NeuroGaze‑Distill</h3>
+          <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-400">Cross‑modal EEG+Gaze → Face distillation for robust emotion recognition.</p>
+          <div class="mt-3 text-sm flex gap-3">
+            <a class="underline hover:no-underline" href="https://github.com/Lixeeone" target="_blank" rel="noopener">Code</a>
+          </div>
+        </article>
+        <article class="rounded-2xl border border-zinc-200 dark:border-zinc-800 p-5 bg-white dark:bg-zinc-900">
+          <h3 class="font-semibold">EmoLoom‑2B</h3>
+          <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-400">~2B‑parameter LLM for emotion‑centric QA and VAD‑aligned generation.</p>
+          <div class="mt-3 text-sm flex gap-3">
+            <a class="underline hover:no-underline" href="https://github.com/Lixeeone/Emoloom-2B" target="_blank" rel="noopener">Repo</a>
+            <a class="underline hover:no-underline" href="https://huggingface.co/Lixeeone/Emoloom-2B" target="_blank" rel="noopener">Model Card</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="border-t border-zinc-200 dark:border-zinc-800">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <h2 class="text-2xl font-bold">Contact</h2>
+      <div class="mt-4 text-sm text-zinc-700 dark:text-zinc-300">
+        <p>Email: <a class="underline" href="mailto:your.name@domain.com">your.name@domain.com</a> — replace with your address.</p>
+        <p class="mt-2">Social: <a class="underline" href="https://github.com/Lixeeone" target="_blank" rel="noopener">GitHub</a> · <a class="underline" href="https://huggingface.co/Lixeeone" target="_blank" rel="noopener">Hugging Face</a></p>
+      </div>
+      <p class="mt-8 text-xs text-zinc-500 dark:text-zinc-400">© <span id="year"></span> ACHCI Lab · Lee Tzu Lam. All rights reserved.</p>
+    </div>
+  </section>
+
+  <script>
+    // Theme toggle + remember preference
+    const KEY = 'theme-preference';
+    const root = document.documentElement;
+    const initial = localStorage.getItem(KEY);
+    if (initial === 'dark' || (!initial && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      root.classList.add('dark');
+    }
+    document.getElementById('themeToggle').addEventListener('click', () => {
+      root.classList.toggle('dark');
+      localStorage.setItem(KEY, root.classList.contains('dark') ? 'dark' : 'light');
+    });
+    // Auto-update year
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
