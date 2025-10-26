@@ -61,7 +61,7 @@
 
   .motto{
   position:fixed;
-  right:clamp(8px, 1.2vw, 18px);  /* 更靠右，始终离边一小段距离 */
+  right:clamp(8px, 1.2vw, 11px);  /* 更靠右，始终离边一小段距离 */
   top:50%;
   transform:translateY(-50%) rotate(90deg);
   font-family:"EB Garamond",serif;
@@ -380,29 +380,33 @@ for(let i=0;i<N;i++)parts.push({x:r(0,W),y:r(0,H*.9),vx:r(-.2,.2),vy:r(-.1,.1),r
 (function step(){ctx.clearRect(0,0,W,H);for(const p of parts){p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=`rgba(80,80,120,${p.a})`;ctx.fill()}
 for(let i=0;i<parts.length;i++)for(let j=i+1;j<parts.length;j++){const a=parts[i],b=parts[j],d=Math.hypot(a.x-b.x,a.y-b.y);if(d<90){ctx.strokeStyle='rgba(60,60,120,.06)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke()}}requestAnimationFrame(step)})();
 
-/* Future Map — 神经元式发光传导 + 自动居中兜底 */
+/* ── Future Map — 神经元式发光传导 + 完整兜底（替换原整段） ───────────────────── */
 const wrap = document.getElementById('future-card');
 const tip  = document.getElementById('future-tip');
 const fcv  = document.getElementById('futureCanvas');
 const fctx = fcv.getContext('2d');
+
+// 统一的 DPR（不要再混用不同名字）
 let fDPR = Math.min(window.devicePixelRatio || 1, 2);
 
+// 自适应：窗口变化 + 容器尺寸变化都触发
 function fResize(){
   const r = wrap.getBoundingClientRect();
-  fcv.width  = r.width  * fDPR;
-  fcv.height = r.height * fDPR;
+  fcv.width  = Math.max(1, Math.floor(r.width  * fDPR));
+  fcv.height = Math.max(1, Math.floor(r.height * fDPR));
   fcv.style.width  = r.width  + 'px';
   fcv.style.height = r.height + 'px';
   fctx.setTransform(fDPR,0,0,fDPR,0,0);
 }
 window.addEventListener('resize', fResize, {passive:true});
-new ResizeObserver(fResize).observe(wrap);  // 兜底：容器变化也自适应
+new ResizeObserver(fResize).observe(wrap);
 fResize();
 
+// 简便宽高（统一只保留这一版）
 function Wm(){ return fcv.width  / fDPR }
 function Hm(){ return fcv.height / fDPR }
 
-
+// 你的节点/边（保持不变）
 const nodes = [
   {id:0,  label:'Sparse Activation', desc:'Build routing/gating modules that mimic cortical sparsity (top-k, Hebbian-like updates) to keep perception efficient while preserving discriminative power for affect cues.'},
   {id:1,  label:'Efficient Decision', desc:'Fuse amortized tree search with model-based RL under cognitive constraints (limited working memory, bounded rationality) to achieve stable reasoning in safety-critical HCI.'},
@@ -416,84 +420,140 @@ const nodes = [
   {id:9,  label:'Seed-V / OCR', desc:'Vision-language preprocessing & document understanding foundation for affect-aware QA.'},
   {id:10, label:'Amygdala-gate', desc:'A single-turn, discrete gating prior that prioritizes emotionally salient events without persistent rumination.'},
 ];
+const edges = [[0,1],[0,2],[2,3],[1,4],[4,5],[5,6],[4,8],[7,8],[8,9],[5,10],[0,6],[6,2],[3,6],[1,10]];
 
-const edges=[[0,1],[0,2],[2,3],[1,4],[4,5],[5,6],[4,8],[7,8],[8,9],[5,10],[0,6],[6,2],[3,6],[1,10]];
+// 初始随机分布（保留在容器中部范围）
+function rand(a,b){ return a + Math.random()*(b-a) }
+nodes.forEach(n=>{
+  n.x = rand(Wm()*0.2, Wm()*0.8);
+  n.y = rand(Hm()*0.2, Hm()*0.8);
+  n.vx = 0; n.vy = 0;
+});
 
-function rand(a,b){return a+Math.random()*(b-a)}
-function Wm(){return fcv.width/DPR} function Hm(){return fcv.height/DPR}
-nodes.forEach(n=>{n.x=rand(Wm()*0.15,Wm()*0.85);n.y=rand(Hm()*0.15,Hm()*0.85);n.vx=0;n.vy=0});
+let hover = null;
 
-let hover=null;
 function tick(){
-  const k=0.045, rep=1600, damp=.88, pad=30;
-  for(let i=0;i<nodes.length;i++)for(let j=i+1;j<nodes.length;j++){
-    const a=nodes[i],b=nodes[j];let dx=a.x-b.x,dy=a.y-b.y,d=Math.hypot(dx,dy)+.1;
-    const F=rep/(d*d);dx/=d;dy/=d;a.vx+=dx*F;a.vy+=dy*F;b.vx-=dx*F;b.vy-=dy*F;
+  // 自适应边距：画布越小，pad 比例越大；保证不贴边不遮挡
+  const padBase = Math.min(Wm(), Hm()) * 0.08;        // 8% 尺寸
+  const pad      = Math.max(28, Math.min(60, padBase));
+
+  // 斥力/引力/弹簧参数
+  const kSpring=0.045, rep=1600, damp=0.88;
+  const cx=Wm()*0.5, cy=Hm()*0.5;                     // 中心引力，防止漂到边缘
+  const gPull=0.0025;
+
+  // 斥力
+  for(let i=0;i<nodes.length;i++){
+    for(let j=i+1;j<nodes.length;j++){
+      const a=nodes[i], b=nodes[j];
+      let dx=a.x-b.x, dy=a.y-b.y, d=Math.hypot(dx,dy)+0.1;
+      const F=rep/(d*d); dx/=d; dy/=d;
+      a.vx+=dx*F; a.vy+=dy*F;
+      b.vx-=dx*F; b.vy-=dy*F;
+    }
   }
+  // 边的弹簧力
   for(const [i,j] of edges){
-    const a=nodes[i],b=nodes[j];let dx=b.x-a.x,dy=b.y-a.y,d=Math.hypot(dx,dy)+.1;
-    const F=k*(d-130);dx/=d;dy/=d;a.vx+=dx*F;a.vy+=dy*F;b.vx-=dx*F;b.vy-=dy*F;
+    const a=nodes[i], b=nodes[j];
+    let dx=b.x-a.x, dy=b.y-a.y, d=Math.hypot(dx,dy)+0.1;
+    const F=kSpring*(d-130); dx/=d; dy/=d;
+    a.vx+=dx*F; a.vy+=dy*F;
+    b.vx-=dx*F; b.vy-=dy*F;
   }
+  // 中心引力 + 速度衰减 + 边界兜底
   for(const n of nodes){
-    n.vx*=damp;n.vy*=damp;n.x+=n.vx;n.y+=n.vy;
-    if(n.x<pad||n.x>Wm()-pad)n.vx*=-1;
-    if(n.y<pad||n.y>Hm()-pad)n.vy*=-1;
+    // 轻微拉回中心
+    n.vx += (cx - n.x) * gPull;
+    n.vy += (cy - n.y) * gPull;
+
+    n.vx *= damp; n.vy *= damp;
+    n.x  += n.vx; n.y  += n.vy;
+
+    // 边界反弹：保证全部在可视范围（考虑 pad）
+    if(n.x < pad){ n.x = pad; if(n.vx<0) n.vx*=-0.8; }
+    if(n.x > Wm()-pad){ n.x = Wm()-pad; if(n.vx>0) n.vx*=-0.8; }
+    if(n.y < pad){ n.y = pad; if(n.vy<0) n.vy*=-0.8; }
+    if(n.y > Hm()-pad){ n.y = Hm()-pad; if(n.vy>0) n.vy*=-0.8; }
   }
 }
 
 function draw(){
   fctx.clearRect(0,0,Wm(),Hm());
   tick();
-  const t=Date.now()/800;
-  // --- 发光流动线条 ---
-  for(const [i,j] of edges){
-    const a=nodes[i],b=nodes[j];
-    const g=fctx.createLinearGradient(a.x,a.y,b.x,b.y);
+
+  const t = Date.now()/800;
+
+  // 连接（发光线 + 神经递质脉冲）
+  fctx.globalCompositeOperation = 'lighter';
+  for(let ei=0; ei<edges.length; ei++){
+    const [i,j] = edges[ei];
+    const a = nodes[i], b = nodes[j];
+
+    // 发光连线
+    const g = fctx.createLinearGradient(a.x,a.y,b.x,b.y);
     g.addColorStop(0,'rgba(96,165,250,.55)');
     g.addColorStop(.5,'rgba(167,139,250,.45)');
     g.addColorStop(1,'rgba(236,72,153,.38)');
     fctx.lineWidth=1.5;
     fctx.strokeStyle=g;
-    fctx.beginPath();
-    fctx.moveTo(a.x,a.y);
-    fctx.lineTo(b.x,b.y);
-    fctx.stroke();
+    fctx.beginPath(); fctx.moveTo(a.x,a.y); fctx.lineTo(b.x,b.y); fctx.stroke();
 
-    // 神经递质点沿线传导
-    const p=(t+i)%1;const x=a.x+(b.x-a.x)*p, y=a.y+(b.y-a.y)*p;
-    const s=fctx.createRadialGradient(x,y,0,x,y,10);
-    s.addColorStop(0,'rgba(147,197,253,.6)');
-    s.addColorStop(1,'rgba(147,197,253,0)');
-    fctx.fillStyle=s;
-    fctx.beginPath();fctx.arc(x,y,10,0,Math.PI*2);fctx.fill();
+    // 两个“囊泡”沿线传导（相位不同）
+    const p1=(t*0.6 + ei*0.17)%1, x1=a.x+(b.x-a.x)*p1, y1=a.y+(b.y-a.y)*p1;
+    const r1=fctx.createRadialGradient(x1,y1,0,x1,y1,11);
+    r1.addColorStop(0,'rgba(147,197,253,.65)'); r1.addColorStop(1,'rgba(147,197,253,0)');
+    fctx.fillStyle=r1; fctx.beginPath(); fctx.arc(x1,y1,11,0,Math.PI*2); fctx.fill();
+    fctx.fillStyle='rgba(59,130,246,0.9)'; fctx.beginPath(); fctx.arc(x1,y1,2.2,0,Math.PI*2); fctx.fill();
+
+    const p2=(t*0.6 + 0.35 + ei*0.17)%1, x2=a.x+(b.x-a.x)*p2, y2=a.y+(b.y-a.y)*p2;
+    const r2=fctx.createRadialGradient(x2,y2,0,x2,y2,11);
+    r2.addColorStop(0,'rgba(167,139,250,.6)'); r2.addColorStop(1,'rgba(167,139,250,0)');
+    fctx.fillStyle=r2; fctx.beginPath(); fctx.arc(x2,y2,11,0,Math.PI*2); fctx.fill();
+    fctx.fillStyle='rgba(99,102,241,0.9)'; fctx.beginPath(); fctx.arc(x2,y2,2.1,0,Math.PI*2); fctx.fill();
   }
-  // --- 节点 ---
+  fctx.globalCompositeOperation = 'source-over';
+
+  // 节点（发光 + 标签）
   for(const n of nodes){
-    const gl=fctx.createRadialGradient(n.x,n.y,0,n.x,n.y,22);
-    gl.addColorStop(0,'rgba(96,165,250,.35)');
+    const gl=fctx.createRadialGradient(n.x,n.y,0,n.x,n.y,24);
+    gl.addColorStop(0,'rgba(96,165,250,.34)');
     gl.addColorStop(1,'rgba(96,165,250,0)');
-    fctx.fillStyle=gl;fctx.beginPath();fctx.arc(n.x,n.y,22,0,Math.PI*2);fctx.fill();
+    fctx.fillStyle=gl; fctx.beginPath(); fctx.arc(n.x,n.y,24,0,Math.PI*2); fctx.fill();
 
-    fctx.fillStyle=hover===n?'#4338ca':'#3b82f6';
-    fctx.beginPath();fctx.arc(n.x,n.y,hover===n?7:5,0,Math.PI*2);fctx.fill();
+    fctx.fillStyle = hover===n ? '#4338ca' : '#3b82f6';
+    fctx.beginPath(); fctx.arc(n.x,n.y,hover===n?7:5,0,Math.PI*2); fctx.fill();
 
-    fctx.font='600 12px Inter';fctx.fillStyle='#111';
-    fctx.textAlign='center';fctx.fillText(n.label,n.x,n.y-14);
+    fctx.font='600 12px Inter, ui-sans-serif';
+    fctx.fillStyle='#111'; fctx.textAlign='center';
+    fctx.fillText(n.label, n.x, n.y-16);
   }
+
   requestAnimationFrame(draw);
 }
 draw();
 
-function hit(x,y){for(const n of nodes){if(Math.hypot(x-n.x,y-n.y)<=10)return n}return null;}
-fcv.addEventListener('mousemove',e=>{
-  const r=fcv.getBoundingClientRect();const x=e.clientX-r.left,y=e.clientY-r.top;
-  hover=hit(x,y);
-  if(hover){tip.style.display='block';tip.textContent=hover.desc;
-    const tw=tip.offsetWidth,th=tip.offsetHeight;
-    let tx=x+14,ty=y+14;if(tx+tw>r.width)tx=x-tw-14;if(ty+th>r.height)ty=y-th-14;
-    tip.style.transform=`translate(${tx}px,${ty}px)`;}
-  else tip.style.display='none';
+// Hover/tooltip（带边界兜底）
+function hit(x,y){
+  for(const n of nodes){ if(Math.hypot(x-n.x,y-n.y)<=10) return n; }
+  return null;
+}
+fcv.addEventListener('mousemove', e=>{
+  const r = fcv.getBoundingClientRect();
+  const x = e.clientX - r.left, y = e.clientY - r.top;
+  hover = hit(x,y);
+  if(hover){
+    tip.style.display='block';
+    tip.textContent = hover.desc;
+    const tw=tip.offsetWidth, th=tip.offsetHeight;
+    let tx=x+14, ty=y+14;
+    if(tx+tw>r.width)  tx=x-tw-14;
+    if(ty+th>r.height) ty=y-th-14;
+    tip.style.transform=`translate(${Math.max(6,tx)}px, ${Math.max(6,ty)}px)`;
+  }else{
+    tip.style.display='none';
+  }
 });
+
 
 </script>
 </body>
