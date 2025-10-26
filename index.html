@@ -60,9 +60,25 @@
   .claim-wrap::after{content:"”";right:.1rem;top:auto;bottom:-.6rem;opacity:.22}
 
  
-  /* 教育校徽容器（透明图不做过度处理，仅统一大小） */
-  .crest-wrap{width:48px;height:48px;border-radius:11px;display:flex;align-items:center;justify-content:center}
-  .crest{max-width:100%;max-height:100%;object-fit:contain}
+  /* 统一外框：方形、等比、不会被拉伸 */
+.crest-wrap{
+  width: 56px;              /* 你现在是 48，可按需改 */
+  aspect-ratio: 1 / 1;      /* 强制正方形 */
+  border-radius: 11px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;  /* 保持透明底 */
+}
+
+/* 内图：最大化但不裁切，始终等比 */
+.crest{
+  width: 80%;
+  height: 80%;
+  object-fit: contain;
+  display: block;
+}
+
 
   /* 论文卡片 */
   .paper{background:#f8f9fb;border:1px solid #e5e7eb;border-radius:12px}
@@ -325,7 +341,7 @@
             <div class="crest-wrap"><img src="assets/dhunew.png" alt="DHU crest" class="crest" loading="lazy"/></div>
             <div>
               <div class="t-role">Undergrad Student</div>
-              <div class="t-where">School of Computer Science & Technology, Donghua University · Shanghai <a class="underline" href="https://mail.dhu.edu.cn" target="_blank" rel="noopener">(mail.dhu.edu.cn)</a></div>
+              <div class="t-where">School of Computer Science & Technology, Donghua University · Shanghai <a class="underline" href="https://www.dhu.edu.cn" target="_blank" rel="noopener">(mail.dhu.edu.cn)</a></div>
             </div>
           </div>
           <div class="t-when">2023 – Present</div>
@@ -336,13 +352,10 @@
         <div class="t-dot"></div>
         <div class="t-hd">
           <div class="flex items-start gap-3">
-            <div class="crest-wrap"><img src="assets/chiba.svg" alt="Chiba University crest" class="crest" loading="lazy"/></div>
-            <div>
-              <div class="t-role">Visiting Student</div>
-              <div class="t-where">Chiba University · Japan</div>
-            </div>
+            <div class="crest-wrap"><img src="assets/chiba.svg" class="crest" alt="Chiba University"/></div>
+            <div><div class="t-role">Visiting Student</div><div class="t-where">Chiba University · Japan <a href="https://www.chiba-u.ac.jp/e/" target="_blank" class="underline">(chiba-u.ac.jp)</a></div></div>
           </div>
-          <div class="t-when">2025 Sep</div>
+          <div class="t-when">2025 Sep.</div>
         </div>
       </div>
     </div>
