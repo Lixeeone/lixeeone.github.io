@@ -100,21 +100,27 @@
   --motto-offset: 5px;
 }
 
+@supports (right: env(safe-area-inset-right)) {
+  #motto{
+    right: calc(env(safe-area-inset-right) + 5px) !important; /* 与上面的 right 数值保持一致 */
+  }
+}
 
 </style>
   
 </head>
 <body class="antialiased">
 
-<!-- 固定竖排水印（最终版：行内样式直接生效） -->
+<!-- 固定竖排水印（最终稳定版） -->
 <div id="motto"
-     style="position:fixed; top:50%; right:0; transform:translateX(-10px) translateY(-50%) rotate(90deg);
+     style="position:fixed; top:50%; right:8px; transform:translateY(-50%) rotate(90deg);
             font-family:'EB Garamond',serif; font-weight:700; font-size:clamp(22px,6vw,60px);
             letter-spacing:.02em; background:linear-gradient(90deg,#0ea5e9,#6366f1);
             -webkit-background-clip:text; background-clip:text; color:transparent; opacity:.09;
             user-select:none; pointer-events:none; z-index:1; white-space:nowrap;">
   AI4Science, Science2AI
 </div>
+
 
 
 <!-- 顶部导航 -->
@@ -573,8 +579,7 @@ fcv.addEventListener('mousemove', e=>{
 
     // 贴右（right:0）+ 左移 OFFSET + 额外安全区（如果有）
     el.style.right = '0px';
-    el.style.transform =
-      'translateX(' + (-(OFFSET + safe)) + 'px) translateY(-50%) rotate(90deg)';
+   
   })();
 </script>
 
