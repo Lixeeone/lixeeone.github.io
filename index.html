@@ -111,16 +111,16 @@
 </head>
 <body class="antialiased">
 
-<!-- 右侧水印（终极版） -->
 <div id="wm"
      style="position:fixed; top:50%; left:0; transform:translateY(-50%) rotate(90deg);
             font-family:'EB Garamond',serif; font-weight:700; font-size:clamp(22px,6vw,60px);
             letter-spacing:.02em; background:linear-gradient(90deg,#0ea5e9,#6366f1);
-            -webkit-background-clip:text; background-clip:text; color:transparent; opacity:.09;
-            user-select:none; pointer-events:none; z-index:9999; white-space:nowrap;">
+            -webkit-background-clip:text; background-clip:text; color:transparent;
+            -webkit-text-fill-color:transparent; /* 关键：Safari 需要 */
+            background-size:100% 100%;            /* 关键：确保渐变可见 */
+            opacity:.09; user-select:none; pointer-events:none; z-index:9999; white-space:nowrap;">
   AI4Science, Science2AI
 </div>
-
 
 
 
@@ -562,62 +562,59 @@ fcv.addEventListener('mousemove', e=>{
 });
 
 
-</script>
-  <script>
-  (function() {
-    var el = document.getElementById('motto');
-    if (!el) return;
-    // 你只改这一行数字就行（偏移量，越小越靠右）
-    var OFFSET = 5; // px
-
-    // 基础定位（行内样式已生效，这里只在支持安全区的设备上再修正一次）
-    var safe = 0;
-    try {
-      // 有的浏览器支持 env(safe-area-inset-right) 的计算
-      safe = parseInt(getComputedStyle(document.documentElement)
-                      .getPropertyValue('padding-right')) || 0;
-    } catch(e) {}
-
-    // 贴右（right:0）+ 左移 OFFSET + 额外安全区（如果有）
-    el.style.right = '0px';
-   
-  })();
-</script>
 
 <script>
 (function(){
   var el = document.getElementById('wm');
   if(!el) return;
 
-  // 只改这一个数字：与右边的间距（越小越靠右）
-  var GUTTER = 8; // px
+  // 距离右边的像素（改这里就好）
+  var GUTTER = 8;
 
-  function place(){
-    // 视口宽度
+  function place() {
     var vw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-    // 先让它不影响测量
-    el.style.visibility = 'hidden';
+
+    // —— 1) 临时去掉旋转来“测真实宽度” —— //
+    var oldTransform = el.style.transform;
+    el.style.transform = 'translateY(-50%)';   // 先不 rotate，避免测宽为 0
+    el.style.visibility = 'hidden';            // 不闪烁
     el.style.left = '0px';
-    // 旋转后的宽度按实际盒子测（包含旋转后投影宽度）
+
     var w = el.getBoundingClientRect().width;
-    // 计算：left = 视口宽度 - 文字宽度 - 安全间距
+
+    // 防御：字体未加载或其他原因导致 w=0 的情况，给个兜底
+    if (!w || w < 2) {
+      w = el.textContent.length * 16; // 粗略兜底，等字体加载后会再校正
+    }
+
+    // —— 2) 计算 left，再恢复旋转 —— //
     var left = vw - w - GUTTER;
     el.style.left = left + 'px';
     el.style.visibility = '';
+    el.style.transform = oldTransform;
   }
 
-  // 初次 + 监听
+  // 初次定位
   place();
+
+  // 窗口变化重算
   window.addEventListener('resize', place, {passive:true});
 
-  // 兼容 iPhone 刘海安全区（如果支持）
-  try{
-    var safe = parseInt(getComputedStyle(document.documentElement)
-                .getPropertyValue('padding-right')) || 0;
-    if(safe){ GUTTER += safe; place(); }
-  }catch(e){}
+  // 字体加载完成后再校正一次（很关键）
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(place).catch(function(){});
+  }
+  // 所有资源加载完也再跑一次
+  window.addEventListener('load', place, {passive:true});
+
+  // iPhone 刘海安全区（如果页面把 safe-area 转成 padding-right）
+  try {
+    var safe = parseInt(getComputedStyle(document.documentElement).getPropertyValue('padding-right')) || 0;
+    if (safe) { GUTTER += safe; place(); }
+  } catch(e) {}
 })();
 </script>
+
 
 
 </body>
