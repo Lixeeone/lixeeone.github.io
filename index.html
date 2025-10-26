@@ -111,15 +111,16 @@
 </head>
 <body class="antialiased">
 
-<!-- 固定竖排水印（最终稳定版） -->
-<div id="motto"
-     style="position:fixed; top:50%; right:8px; transform:translateY(-50%) rotate(90deg);
+<!-- 右侧水印（终极版） -->
+<div id="wm"
+     style="position:fixed; top:50%; left:0; transform:translateY(-50%) rotate(90deg);
             font-family:'EB Garamond',serif; font-weight:700; font-size:clamp(22px,6vw,60px);
             letter-spacing:.02em; background:linear-gradient(90deg,#0ea5e9,#6366f1);
             -webkit-background-clip:text; background-clip:text; color:transparent; opacity:.09;
-            user-select:none; pointer-events:none; z-index:1; white-space:nowrap;">
+            user-select:none; pointer-events:none; z-index:9999; white-space:nowrap;">
   AI4Science, Science2AI
 </div>
+
 
 
 
@@ -582,6 +583,42 @@ fcv.addEventListener('mousemove', e=>{
    
   })();
 </script>
+
+<script>
+(function(){
+  var el = document.getElementById('wm');
+  if(!el) return;
+
+  // 只改这一个数字：与右边的间距（越小越靠右）
+  var GUTTER = 8; // px
+
+  function place(){
+    // 视口宽度
+    var vw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+    // 先让它不影响测量
+    el.style.visibility = 'hidden';
+    el.style.left = '0px';
+    // 旋转后的宽度按实际盒子测（包含旋转后投影宽度）
+    var w = el.getBoundingClientRect().width;
+    // 计算：left = 视口宽度 - 文字宽度 - 安全间距
+    var left = vw - w - GUTTER;
+    el.style.left = left + 'px';
+    el.style.visibility = '';
+  }
+
+  // 初次 + 监听
+  place();
+  window.addEventListener('resize', place, {passive:true});
+
+  // 兼容 iPhone 刘海安全区（如果支持）
+  try{
+    var safe = parseInt(getComputedStyle(document.documentElement)
+                .getPropertyValue('padding-right')) || 0;
+    if(safe){ GUTTER += safe; place(); }
+  }catch(e){}
+})();
+</script>
+
 
 </body>
 </html>
