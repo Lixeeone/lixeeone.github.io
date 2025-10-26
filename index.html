@@ -95,12 +95,17 @@
   --motto-gutter: 6px;
 }
 
-/* 竖排水印（统一写法，桌面 & 刘海屏都适用） */
+:root{
+  /* 想更靠右就调小（例如 4px）；想往里一点就调大（例如 12px） */
+  --motto-offset: 5px;
+}
+
+/* 竖排水印（简单可控：right 固定为 0，仅用 translateX 调整） */
 .motto{
   position: fixed;
   top: 50%;
-  right: var(--motto-gutter) !important;                  /* 贴右边，保留安全距 */
-  transform: translate(calc(-1 * var(--motto-gutter)), -50%) rotate(90deg);
+  right: 0 !important;  /* 固定贴右边 */
+  transform: translateX(calc(-1 * var(--motto-offset))) translateY(-50%) rotate(90deg);
   font-family: "EB Garamond", serif;
   font-weight: 700;
   font-size: clamp(22px, 6vw, 60px);
@@ -112,17 +117,19 @@
   opacity: .09;
   user-select: none;
   pointer-events: none;
-  z-index: 1;            /* 不遮挡交互 */
+  z-index: 1;
   white-space: nowrap;
 }
 
-/* 刘海/安全区兼容：在右边再加上安全区宽度 */
+/* 刘海/安全区兼容：追加安全区后再整体左移 */
 @supports (right: env(safe-area-inset-right)) {
   .motto{
-    right: calc(env(safe-area-inset-right) + var(--motto-gutter)) !important;
-    transform: translate(calc(-1 * var(--motto-gutter) - env(safe-area-inset-right)), -50%) rotate(90deg);
+    right: env(safe-area-inset-right) !important;
+    transform: translateX(calc(-1 * var(--motto-offset) - env(safe-area-inset-right)))
+               translateY(-50%) rotate(90deg);
   }
 }
+
 
 </style>
 </head>
@@ -328,7 +335,7 @@
               <div class="t-where">Shanghai Jiao Tong University · Shanghai <a class="underline" href="https://www.sjtu.edu.cn" target="_blank" rel="noopener">(sjtu.edu.cn)</a></div>
             </div>
           </div>
-          <div class="t-when">2025 – Present</div>
+          <div class="t-when">2024 – Present</div>
         </div>
       </div>
 
@@ -356,7 +363,7 @@
               <div class="t-where">Chiba University · Japan</div>
             </div>
           </div>
-          <div class="t-when">2025</div>
+          <div class="t-when">2025 Sep</div>
         </div>
       </div>
     </div>
