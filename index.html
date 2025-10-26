@@ -100,43 +100,22 @@
   --motto-offset: 5px;
 }
 
-/* 竖排水印（简单可控：right 固定为 0，仅用 translateX 调整） */
-.motto{
-  position: fixed;
-  top: 50%;
-  right: 0 !important;  /* 固定贴右边 */
-  transform: translateX(calc(-1 * var(--motto-offset))) translateY(-50%) rotate(90deg);
-  font-family: "EB Garamond", serif;
-  font-weight: 700;
-  font-size: clamp(22px, 6vw, 60px);
-  letter-spacing: .02em;
-  background: linear-gradient(90deg,#0ea5e9,#6366f1);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  opacity: .09;
-  user-select: none;
-  pointer-events: none;
-  z-index: 1;
-  white-space: nowrap;
-}
-
-/* 刘海/安全区兼容：追加安全区后再整体左移 */
-@supports (right: env(safe-area-inset-right)) {
-  .motto{
-    right: env(safe-area-inset-right) !important;
-    transform: translateX(calc(-1 * var(--motto-offset) - env(safe-area-inset-right)))
-               translateY(-50%) rotate(90deg);
-  }
-}
-
 
 </style>
+  
 </head>
 <body class="antialiased">
 
-<!-- 固定竖排水印 -->
-<div class="motto">AI4Science, Science2AI</div>
+<!-- 固定竖排水印（最终版：行内样式直接生效） -->
+<div id="motto"
+     style="position:fixed; top:50%; right:0; transform:translateX(-10px) translateY(-50%) rotate(90deg);
+            font-family:'EB Garamond',serif; font-weight:700; font-size:clamp(22px,6vw,60px);
+            letter-spacing:.02em; background:linear-gradient(90deg,#0ea5e9,#6366f1);
+            -webkit-background-clip:text; background-clip:text; color:transparent; opacity:.09;
+            user-select:none; pointer-events:none; z-index:1; white-space:nowrap;">
+  AI4Science, Science2AI
+</div>
+
 
 <!-- 顶部导航 -->
 <header class="sticky top-0 z-50 border-b border-zinc-200 glass">
@@ -577,5 +556,27 @@ fcv.addEventListener('mousemove', e=>{
 
 
 </script>
+  <script>
+  (function() {
+    var el = document.getElementById('motto');
+    if (!el) return;
+    // 你只改这一行数字就行（偏移量，越小越靠右）
+    var OFFSET = 5; // px
+
+    // 基础定位（行内样式已生效，这里只在支持安全区的设备上再修正一次）
+    var safe = 0;
+    try {
+      // 有的浏览器支持 env(safe-area-inset-right) 的计算
+      safe = parseInt(getComputedStyle(document.documentElement)
+                      .getPropertyValue('padding-right')) || 0;
+    } catch(e) {}
+
+    // 贴右（right:0）+ 左移 OFFSET + 额外安全区（如果有）
+    el.style.right = '0px';
+    el.style.transform =
+      'translateX(' + (-(OFFSET + safe)) + 'px) translateY(-50%) rotate(90deg)';
+  })();
+</script>
+
 </body>
 </html>
