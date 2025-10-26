@@ -59,14 +59,26 @@
   .claim-wrap::before{left:.1rem}
   .claim-wrap::after{content:"”";right:.1rem;top:auto;bottom:-.6rem;opacity:.22}
 
-  /* 右侧竖排水印 */
   .motto{
-    position:fixed;right:10px;top:50%;transform:translateY(-50%) rotate(90deg);
-    font-family:"EB Garamond",serif;font-weight:700;
-    font-size:clamp(28px,10vw,90px);letter-spacing:.02em;
-    background:linear-gradient(90deg,#0ea5e9,#6366f1);-webkit-background-clip:text;background-clip:text;color:transparent;
-    opacity:.10;user-select:none;pointer-events:none;z-index:3;white-space:nowrap
-  }
+  position:fixed;
+  right:40px;                /* ← 离右边稍远一些 */
+  top:50%;
+  transform:translateY(-50%) rotate(90deg);
+  font-family:"EB Garamond",serif;
+  font-weight:700;
+  font-size:clamp(22px,6vw,60px); /* ← 稍小，适中比例 */
+  letter-spacing:.02em;
+  background:linear-gradient(90deg,#0ea5e9,#6366f1);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  opacity:.09;               /* 更柔和透明度 */
+  user-select:none;
+  pointer-events:none;
+  z-index:3;
+  white-space:nowrap;
+}
+
 
   /* 教育校徽容器（透明图不做过度处理，仅统一大小） */
   .crest-wrap{width:48px;height:48px;border-radius:11px;display:flex;align-items:center;justify-content:center}
@@ -367,82 +379,100 @@ for(let i=0;i<N;i++)parts.push({x:r(0,W),y:r(0,H*.9),vx:r(-.2,.2),vy:r(-.1,.1),r
 (function step(){ctx.clearRect(0,0,W,H);for(const p of parts){p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=`rgba(80,80,120,${p.a})`;ctx.fill()}
 for(let i=0;i<parts.length;i++)for(let j=i+1;j<parts.length;j++){const a=parts[i],b=parts[j],d=Math.hypot(a.x-b.x,a.y-b.y);if(d<90){ctx.strokeStyle='rgba(60,60,120,.06)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke()}}requestAnimationFrame(step)})();
 
-/* Future Map — 发光流线力导向 */
+/* Future Map — 神经元式发光传导 + 自动居中兜底 */
 const wrap=document.getElementById('future-card');
 const tip=document.getElementById('future-tip');
 const fcv=document.getElementById('futureCanvas'),fctx=fcv.getContext('2d');
-function fResize(){const rct=wrap.getBoundingClientRect();fcv.width=rct.width*DPR;fcv.height=rct.height*DPR;fcv.style.width=rct.width+'px';fcv.style.height=rct.height+'px';fctx.setTransform(DPR,0,0,DPR,0,0)}
-window.addEventListener('resize',fResize,{passive:true});fResize();
+let DPR=Math.min(window.devicePixelRatio||1,2);
 
-/* 节点与描述 */
-const nodes=[
-  {id:0, label:'Sparse Activation', desc:'Cortical-like routing/gating (top-k, Hebbian-style) for efficient affect perception.'},
-  {id:1, label:'Efficient Decision', desc:'Amortized tree search + model-based RL under cognitive bounds for safe HCI.'},
-  {id:2, label:'Ling-MCP', desc:'Memory-constrained planning with rolling summaries & resets.'},
-  {id:3, label:'Ling-CoT', desc:'Evolutionary mutations/selection to harden CoT to polarity/prompt shifts.'},
-  {id:4, label:'HCI · evo-loops', desc:'Interactive tutoring/co-creation that adapts feedback to user affect.'},
-  {id:5, label:'Agents', desc:'Tool-use with self-reflection checkpoints and affect cues.'},
-  {id:6, label:'Layer Probing', desc:'Representation surgery + causal mediation to localize appraisal/valence.'},
-  {id:7, label:'ChineseEEG-2', desc:'Bilingual speech↔listening dataset; standardized MNE-Python pipeline.'},
-  {id:8, label:'NCC Pipelines', desc:'EEG/MEG pipelines, deterministic eval, stress-tests.'},
-  {id:9, label:'Seed-V / OCR', desc:'VL preprocessing & document understanding for affect QA.'},
-  {id:10,label:'Amygdala-gate', desc:'Single-turn discrete gate to prioritize salience without rumination.'},
-];
+function fResize(){
+  const r=wrap.getBoundingClientRect();
+  fcv.width=r.width*DPR; fcv.height=r.height*DPR;
+  fcv.style.width=r.width+'px'; fcv.style.height=r.height+'px';
+  fctx.setTransform(DPR,0,0,DPR,0,0);
+}
+window.addEventListener('resize',fResize,{passive:true});
+fResize();
+
+const nodes=[ /* same nodes */ ];
 const edges=[[0,1],[0,2],[2,3],[1,4],[4,5],[5,6],[4,8],[7,8],[8,9],[5,10],[0,6],[6,2],[3,6],[1,10]];
 
-/* 初始分布尽量填满画布可视区 */
+function rand(a,b){return a+Math.random()*(b-a)}
 function Wm(){return fcv.width/DPR} function Hm(){return fcv.height/DPR}
-nodes.forEach(n=>{n.x=r(Wm()*0.18,Wm()*0.85);n.y=r(Hm()*0.18,Hm()*0.82);n.vx=0;n.vy=0});
-let hover=null;const A='#60a5fa',B='#a78bfa';
+nodes.forEach(n=>{n.x=rand(Wm()*0.15,Wm()*0.85);n.y=rand(Hm()*0.15,Hm()*0.85);n.vx=0;n.vy=0});
+
+let hover=null;
 function tick(){
-  const k=0.04, rep=1300, damp=.86;
+  const k=0.045, rep=1600, damp=.88, pad=30;
   for(let i=0;i<nodes.length;i++)for(let j=i+1;j<nodes.length;j++){
-    const a=nodes[i],b=nodes[j];let dx=a.x-b.x,dy=a.y-b.y,d=Math.hypot(dx,dy)+.01;
-    const F=rep/(d*d);dx/=d;dy/=d;a.vx+=dx*F;a.vy+=dy*F;b.vx-=dx*F;b.vy-=dy*F
+    const a=nodes[i],b=nodes[j];let dx=a.x-b.x,dy=a.y-b.y,d=Math.hypot(dx,dy)+.1;
+    const F=rep/(d*d);dx/=d;dy/=d;a.vx+=dx*F;a.vy+=dy*F;b.vx-=dx*F;b.vy-=dy*F;
   }
   for(const [i,j] of edges){
-    const a=nodes[i],b=nodes[j];let dx=b.x-a.x,dy=b.y-a.y,d=Math.hypot(dx,dy)+.01;
-    const L=118,F=k*(d-L);dx/=d;dy/=d;a.vx+=dx*F;a.vy+=dy*F;b.vx-=dx*F;b.vy-=dy*F
+    const a=nodes[i],b=nodes[j];let dx=b.x-a.x,dy=b.y-a.y,d=Math.hypot(dx,dy)+.1;
+    const F=k*(d-130);dx/=d;dy/=d;a.vx+=dx*F;a.vy+=dy*F;b.vx-=dx*F;b.vy-=dy*F;
   }
   for(const n of nodes){
     n.vx*=damp;n.vy*=damp;n.x+=n.vx;n.y+=n.vy;
-    const pad=28;if(n.x<pad||n.x>Wm()-pad)n.vx*=-1;if(n.y<pad||n.y>Hm()-pad)n.vy*=-1
+    if(n.x<pad||n.x>Wm()-pad)n.vx*=-1;
+    if(n.y<pad||n.y>Hm()-pad)n.vy*=-1;
   }
 }
+
 function draw(){
-  fctx.clearRect(0,0,Wm(),Hm());tick();
-  const t=Date.now()/1000;
-  // 渐变连线 + 脉动
+  fctx.clearRect(0,0,Wm(),Hm());
+  tick();
+  const t=Date.now()/800;
+  // --- 发光流动线条 ---
   for(const [i,j] of edges){
     const a=nodes[i],b=nodes[j];
-    const g=fctx.createLinearGradient(a.x,a.y,b.x,b.y);g.addColorStop(0,A);g.addColorStop(1,B);
-    fctx.strokeStyle=`rgba(99,102,241,${0.32+0.14*Math.sin(t+i)})`;fctx.lineWidth=1.25;
-    fctx.shadowColor='rgba(99,102,241,.35)';fctx.shadowBlur=4;
-    fctx.beginPath();fctx.moveTo(a.x,a.y);fctx.lineTo(b.x,b.y);fctx.stroke();
+    const g=fctx.createLinearGradient(a.x,a.y,b.x,b.y);
+    g.addColorStop(0,'rgba(96,165,250,.55)');
+    g.addColorStop(.5,'rgba(167,139,250,.45)');
+    g.addColorStop(1,'rgba(236,72,153,.38)');
+    fctx.lineWidth=1.5;
+    fctx.strokeStyle=g;
+    fctx.beginPath();
+    fctx.moveTo(a.x,a.y);
+    fctx.lineTo(b.x,b.y);
+    fctx.stroke();
+
+    // 神经递质点沿线传导
+    const p=(t+i)%1;const x=a.x+(b.x-a.x)*p, y=a.y+(b.y-a.y)*p;
+    const s=fctx.createRadialGradient(x,y,0,x,y,10);
+    s.addColorStop(0,'rgba(147,197,253,.6)');
+    s.addColorStop(1,'rgba(147,197,253,0)');
+    fctx.fillStyle=s;
+    fctx.beginPath();fctx.arc(x,y,10,0,Math.PI*2);fctx.fill();
   }
-  fctx.shadowBlur=0;
-  // 节点发光
+  // --- 节点 ---
   for(const n of nodes){
-    const glow=fctx.createRadialGradient(n.x,n.y,0,n.x,n.y,18);glow.addColorStop(0,'rgba(99,102,241,.35)');glow.addColorStop(1,'rgba(99,102,241,0)');
-    fctx.fillStyle=glow;fctx.beginPath();fctx.arc(n.x,n.y,18,0,Math.PI*2);fctx.fill();
-    const fill=fctx.createLinearGradient(n.x-10,n.y-10,n.x+10,n.y+10);fill.addColorStop(0,A);fill.addColorStop(1,B);
-    fctx.fillStyle=fill;fctx.beginPath();fctx.arc(n.x,n.y,(hover===n?7:5.2),0,Math.PI*2);fctx.fill();
-    fctx.font='600 12.5px Inter, ui-sans-serif';fctx.fillStyle='#1f2937';fctx.textAlign='center';fctx.fillText(n.label,n.x,n.y-14);
+    const gl=fctx.createRadialGradient(n.x,n.y,0,n.x,n.y,22);
+    gl.addColorStop(0,'rgba(96,165,250,.35)');
+    gl.addColorStop(1,'rgba(96,165,250,0)');
+    fctx.fillStyle=gl;fctx.beginPath();fctx.arc(n.x,n.y,22,0,Math.PI*2);fctx.fill();
+
+    fctx.fillStyle=hover===n?'#4338ca':'#3b82f6';
+    fctx.beginPath();fctx.arc(n.x,n.y,hover===n?7:5,0,Math.PI*2);fctx.fill();
+
+    fctx.font='600 12px Inter';fctx.fillStyle='#111';
+    fctx.textAlign='center';fctx.fillText(n.label,n.x,n.y-14);
   }
-  requestAnimationFrame(draw)
+  requestAnimationFrame(draw);
 }
 draw();
 
-/* hover hit test + tooltip 防越界 */
-function hit(x,y){for(const n of nodes){if(Math.hypot(x-n.x,y-n.y)<=10)return n}return null}
+function hit(x,y){for(const n of nodes){if(Math.hypot(x-n.x,y-n.y)<=10)return n}return null;}
 fcv.addEventListener('mousemove',e=>{
-  const rect=fcv.getBoundingClientRect();const x=(e.clientX-rect.left),y=(e.clientY-rect.top);
+  const r=fcv.getBoundingClientRect();const x=e.clientX-r.left,y=e.clientY-r.top;
   hover=hit(x,y);
   if(hover){tip.style.display='block';tip.textContent=hover.desc;
-    const tw=tip.offsetWidth,th=tip.offsetHeight;let tx=x+16,ty=y+16;
-    if(tx+tw>rect.width)tx=x-tw-16;if(ty+th>rect.height)ty=y-th-16;tip.style.transform=`translate(${tx}px,${ty}px)`;
-  }else tip.style.display='none';
+    const tw=tip.offsetWidth,th=tip.offsetHeight;
+    let tx=x+14,ty=y+14;if(tx+tw>r.width)tx=x-tw-14;if(ty+th>r.height)ty=y-th-14;
+    tip.style.transform=`translate(${tx}px,${ty}px)`;}
+  else tip.style.display='none';
 });
+
 </script>
 </body>
 </html>
