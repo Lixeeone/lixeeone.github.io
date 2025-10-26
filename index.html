@@ -563,57 +563,6 @@ fcv.addEventListener('mousemove', e=>{
 
 
 
-<script>
-(function(){
-  var el = document.getElementById('wm');
-  if(!el) return;
-
-  // 距离右边的像素（改这里就好）
-  var GUTTER = 2;
-
-  function place() {
-    var vw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-
-    // —— 1) 临时去掉旋转来“测真实宽度” —— //
-    var oldTransform = el.style.transform;
-    el.style.transform = 'translateY(-50%)';   // 先不 rotate，避免测宽为 0
-    el.style.visibility = 'hidden';            // 不闪烁
-    el.style.left = '0px';
-
-    var w = el.getBoundingClientRect().width;
-
-    // 防御：字体未加载或其他原因导致 w=0 的情况，给个兜底
-    if (!w || w < 2) {
-      w = el.textContent.length * 16; // 粗略兜底，等字体加载后会再校正
-    }
-
-    // —— 2) 计算 left，再恢复旋转 —— //
-    var left = vw - w - GUTTER;
-    el.style.left = left + 'px';
-    el.style.visibility = '';
-    el.style.transform = oldTransform;
-  }
-
-  // 初次定位
-  place();
-
-  // 窗口变化重算
-  window.addEventListener('resize', place, {passive:true});
-
-  // 字体加载完成后再校正一次（很关键）
-  if (document.fonts && document.fonts.ready) {
-    document.fonts.ready.then(place).catch(function(){});
-  }
-  // 所有资源加载完也再跑一次
-  window.addEventListener('load', place, {passive:true});
-
-  // iPhone 刘海安全区（如果页面把 safe-area 转成 padding-right）
-  try {
-    var safe = parseInt(getComputedStyle(document.documentElement).getPropertyValue('padding-right')) || 0;
-    if (safe) { GUTTER += safe; place(); }
-  } catch(e) {}
-})();
-</script>
 
 
 
