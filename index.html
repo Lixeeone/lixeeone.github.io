@@ -110,6 +110,16 @@
 
   /* 按钮图标统一尺寸 */
   .btn-ic{width:18px;height:18px;display:inline-block}
+  /* 放在样式表的最后，覆盖旧的 right:40px */
+  .motto{
+  right: clamp(6px, 1vw, 8px) !important;   /* 更靠右，且留一点安全边距 */
+  top: 50%;
+  transform: translateY(-50%) rotate(90deg); /* 保持你原来的竖排 */
+  position: fixed;
+  z-index: 3;
+  pointer-events: none;
+}
+
 </style>
 </head>
 <body class="antialiased">
