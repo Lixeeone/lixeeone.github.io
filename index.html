@@ -59,37 +59,7 @@
   .claim-wrap::before{left:.1rem}
   .claim-wrap::after{content:"”";right:.1rem;top:auto;bottom:-.6rem;opacity:.22}
 
-  /* 终版：贴右侧且留 10px 安全距，必定覆盖 */
-body .motto{
-  position: fixed;
-  top: 50%;
-  right: 0 !important;                            /* 贴到最右边 */
-  transform: translate(-6px, -50%) rotate(90deg);/* 往内缩 10px，自行微调 */
-  font-family: "EB Garamond", serif;
-  font-weight: 700;
-  font-size: clamp(22px, 6vw, 60px);
-  letter-spacing: .02em;
-  background: linear-gradient(90deg,#0ea5e9,#6366f1);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  opacity: .09;
-  user-select: none;
-  pointer-events: none;
-  z-index: 1;          /* 不遮挡交互 */
-  white-space: nowrap;
-}
-
-/* iPhone 刘海安全区兼容（可选） */
-@supports (right: env(safe-area-inset-right)) {
-  .motto{
-    right: env(safe-area-inset-right) !important; /* 贴到安全区边 */
-    transform: translate(calc(-10px - env(safe-area-inset-right)), -50%) rotate(90deg);
-  }
-}
-
-
-
+ 
   /* 教育校徽容器（透明图不做过度处理，仅统一大小） */
   .crest-wrap{width:48px;height:48px;border-radius:11px;display:flex;align-items:center;justify-content:center}
   .crest{max-width:100%;max-height:100%;object-fit:contain}
@@ -120,7 +90,40 @@ body .motto{
   /* 按钮图标统一尺寸 */
   .btn-ic{width:18px;height:18px;display:inline-block}
   /* 放在样式表的最后，覆盖旧的 right:40px */
-  
+  :root{
+  /* 统一控制与右边的间距（你要更靠右就调小，比如 4px；靠里就调大） */
+  --motto-gutter: 6px;
+}
+
+/* 竖排水印（统一写法，桌面 & 刘海屏都适用） */
+.motto{
+  position: fixed;
+  top: 50%;
+  right: var(--motto-gutter) !important;                  /* 贴右边，保留安全距 */
+  transform: translate(calc(-1 * var(--motto-gutter)), -50%) rotate(90deg);
+  font-family: "EB Garamond", serif;
+  font-weight: 700;
+  font-size: clamp(22px, 6vw, 60px);
+  letter-spacing: .02em;
+  background: linear-gradient(90deg,#0ea5e9,#6366f1);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  opacity: .09;
+  user-select: none;
+  pointer-events: none;
+  z-index: 1;            /* 不遮挡交互 */
+  white-space: nowrap;
+}
+
+/* 刘海/安全区兼容：在右边再加上安全区宽度 */
+@supports (right: env(safe-area-inset-right)) {
+  .motto{
+    right: calc(env(safe-area-inset-right) + var(--motto-gutter)) !important;
+    transform: translate(calc(-1 * var(--motto-gutter) - env(safe-area-inset-right)), -50%) rotate(90deg);
+  }
+}
+
 </style>
 </head>
 <body class="antialiased">
