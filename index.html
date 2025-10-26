@@ -61,23 +61,24 @@
 
   .motto{
   position:fixed;
-  right:40px;                /* ← 离右边稍远一些 */
+  right:clamp(8px, 1.2vw, 18px);  /* 更靠右，始终离边一小段距离 */
   top:50%;
   transform:translateY(-50%) rotate(90deg);
   font-family:"EB Garamond",serif;
   font-weight:700;
-  font-size:clamp(22px,6vw,60px); /* ← 稍小，适中比例 */
+  font-size:clamp(22px,6vw,60px);
   letter-spacing:.02em;
   background:linear-gradient(90deg,#0ea5e9,#6366f1);
   -webkit-background-clip:text;
   background-clip:text;
   color:transparent;
-  opacity:.09;               /* 更柔和透明度 */
+  opacity:.09;
   user-select:none;
   pointer-events:none;
-  z-index:3;
+  z-index:1;                 /* 始终在主体层后面，不遮挡可交互内容 */
   white-space:nowrap;
 }
+
 
 
   /* 教育校徽容器（透明图不做过度处理，仅统一大小） */
@@ -380,21 +381,42 @@ for(let i=0;i<N;i++)parts.push({x:r(0,W),y:r(0,H*.9),vx:r(-.2,.2),vy:r(-.1,.1),r
 for(let i=0;i<parts.length;i++)for(let j=i+1;j<parts.length;j++){const a=parts[i],b=parts[j],d=Math.hypot(a.x-b.x,a.y-b.y);if(d<90){ctx.strokeStyle='rgba(60,60,120,.06)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke()}}requestAnimationFrame(step)})();
 
 /* Future Map — 神经元式发光传导 + 自动居中兜底 */
-const wrap=document.getElementById('future-card');
-const tip=document.getElementById('future-tip');
-const fcv=document.getElementById('futureCanvas'),fctx=fcv.getContext('2d');
-let DPR=Math.min(window.devicePixelRatio||1,2);
+const wrap = document.getElementById('future-card');
+const tip  = document.getElementById('future-tip');
+const fcv  = document.getElementById('futureCanvas');
+const fctx = fcv.getContext('2d');
+let fDPR = Math.min(window.devicePixelRatio || 1, 2);
 
 function fResize(){
-  const r=wrap.getBoundingClientRect();
-  fcv.width=r.width*DPR; fcv.height=r.height*DPR;
-  fcv.style.width=r.width+'px'; fcv.style.height=r.height+'px';
-  fctx.setTransform(DPR,0,0,DPR,0,0);
+  const r = wrap.getBoundingClientRect();
+  fcv.width  = r.width  * fDPR;
+  fcv.height = r.height * fDPR;
+  fcv.style.width  = r.width  + 'px';
+  fcv.style.height = r.height + 'px';
+  fctx.setTransform(fDPR,0,0,fDPR,0,0);
 }
-window.addEventListener('resize',fResize,{passive:true});
+window.addEventListener('resize', fResize, {passive:true});
+new ResizeObserver(fResize).observe(wrap);  // 兜底：容器变化也自适应
 fResize();
 
-const nodes=[ /* same nodes */ ];
+function Wm(){ return fcv.width  / fDPR }
+function Hm(){ return fcv.height / fDPR }
+
+
+const nodes = [
+  {id:0,  label:'Sparse Activation', desc:'Build routing/gating modules that mimic cortical sparsity (top-k, Hebbian-like updates) to keep perception efficient while preserving discriminative power for affect cues.'},
+  {id:1,  label:'Efficient Decision', desc:'Fuse amortized tree search with model-based RL under cognitive constraints (limited working memory, bounded rationality) to achieve stable reasoning in safety-critical HCI.'},
+  {id:2,  label:'Ling-MCP', desc:'Memory-constrained planning with rolling summaries; bounded working memory and reset policies for stability.'},
+  {id:3,  label:'Ling-CoT', desc:'Evolutionary mutations/selection to harden chain-of-thought against prompt or polarity shifts.'},
+  {id:4,  label:'HCI · evo-loops', desc:'Interactive tutoring & co-creation; systems read users’ affect and choose feedback style (explain, nudge, re-plan).'},
+  {id:5,  label:'Agents', desc:'Dependable tool-use pipelines with self-reflection checkpoints that integrate affect cues (confidence, frustration).'},
+  {id:6,  label:'Layer Probing', desc:'Representation surgery + causal mediation to map where appraisal and valence polarities arise.'},
+  {id:7,  label:'ChineseEEG-2', desc:'Bilingual speech↔listening dataset for semantic alignment & neural decoding; standardized preprocessing in MNE-Python with reproducible splits.'},
+  {id:8,  label:'NCC Pipelines', desc:'EEG/MEG pipelines, deterministic training/eval harness, and stress-tests for valence flips & format robustness.'},
+  {id:9,  label:'Seed-V / OCR', desc:'Vision-language preprocessing & document understanding foundation for affect-aware QA.'},
+  {id:10, label:'Amygdala-gate', desc:'A single-turn, discrete gating prior that prioritizes emotionally salient events without persistent rumination.'},
+];
+
 const edges=[[0,1],[0,2],[2,3],[1,4],[4,5],[5,6],[4,8],[7,8],[8,9],[5,10],[0,6],[6,2],[3,6],[1,10]];
 
 function rand(a,b){return a+Math.random()*(b-a)}
